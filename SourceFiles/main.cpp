@@ -1,19 +1,18 @@
-#include "HeaderFiles/Game.h"
+#include "HeaderFiles/MainMenu.h"
 
 int main()
 {
 
     srand(static_cast<unsigned>(time(0))); // Generate the seed for random
 
-    Game game;
-
-    while (game.getWindow().isOpen())
+    MainMenu mainMenu(800, 600);
+    while (mainMenu.getMenuWindow().isOpen())
     {
-        // Game update
-        game.update();
+        // update main menu
+        mainMenu.update();
 
-        // Game render
-        game.render();
+        // render the main menu
+        mainMenu.render();
     }
 
     return 0;

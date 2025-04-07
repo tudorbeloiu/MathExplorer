@@ -191,6 +191,15 @@ const sf::RenderWindow &Game::getWindow() const
     return *this->window;
 }
 
+void Game::run()
+{
+    while (this->window->isOpen())
+    {
+        this->update();
+        this->render();
+    }
+}
+
 Game::~Game()
 {
     delete this->player;

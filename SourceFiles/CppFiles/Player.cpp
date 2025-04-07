@@ -165,7 +165,6 @@ void Player::updateCollision(const sf::Sprite &back_decor, const sf::Sprite &fro
         newPos.x = -20.f;
     }
     this->player->setPosition(newPos);
-    std::cout << playerBounds.position.x << " " << playerBounds.position.y << '\n';
 }
 
 void Player::update(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target)

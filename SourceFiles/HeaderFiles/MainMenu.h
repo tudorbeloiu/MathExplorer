@@ -1,0 +1,50 @@
+#ifndef MAINMENU_H
+#define MAINMENU_H
+
+#include <iostream>
+#include <vector>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Network.hpp>
+
+#include "Game.h"
+
+class MainMenu
+{
+private:
+    sf::RenderWindow *MENU;
+    sf::Font font;
+    std::vector<sf::Text> mainMenuText;
+    std::optional<sf::Event> menuEvent;
+
+    int mainMenuSelected;
+
+    void initFont();
+    void initText();
+    void initMainMenuVideo();
+
+public:
+    MainMenu(float width, float height);
+
+    void draw(sf::RenderWindow &window);
+    void moveUp();
+    void moveDown();
+
+    void pollEvents();
+
+    void update();
+    void render();
+
+    int mainMenuPressed()
+    {
+        return this->mainMenuSelected;
+    }
+
+    const sf::RenderWindow &getMenuWindow() const;
+
+    ~MainMenu();
+};
+
+#endif

@@ -56,6 +56,8 @@ public:
     // Getters
     const sf::RenderWindow &getWindow() const;
 
+    void run();
+
     virtual ~Game();
 };
 
