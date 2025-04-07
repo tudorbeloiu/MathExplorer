@@ -45,7 +45,7 @@ public:
 
     // Updates
     void update();
-    void updatePlayer(const sf::Sprite& back_decor, const sf::Sprite& front_decor,sf::RenderTarget *target);
+    void updatePlayer(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target);
     void pollEvents();
 
     // Render

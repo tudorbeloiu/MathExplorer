@@ -28,7 +28,7 @@ private:
     sf::IntRect currentFrame;
     sf::Clock animationTimer;
 
-    float playerSpeed = 4.f;
+    float playerSpeed = 3.8f;
     float animationSpeed = 0.1f;
     short animationState = 0;
     int frameIndex = 0;
@@ -39,9 +39,10 @@ private:
 public:
     Player();
 
-    void update(const sf::Sprite& back_decor, const sf::Sprite& front_decor,sf::RenderTarget *target);
+    void update(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target);
     void updateMovement();
-    void updateCollision(const sf::Sprite& back_decor, const sf::Sprite& front_decor,sf::RenderTarget *target);
+    void updateCollision(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target);
+    void updateAnimations();
 
     void render(sf::RenderTarget *target);
 

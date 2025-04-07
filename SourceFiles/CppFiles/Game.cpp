@@ -21,7 +21,7 @@ void Game::initWindow()
 void Game::initPlayer()
 {
     this->player = new Player();
-    this->player->setSpawnPoint(sf::Vector2f({450.f,500.f}));
+    this->player->setSpawnPoint(sf::Vector2f({450.f, 500.f}));
 }
 
 void Game::initWorld()
@@ -37,7 +37,7 @@ void Game::initWorld()
     }
     else
     {
-        
+
         this->background = new sf::Sprite(this->backgroundTexture);
 
         sf::Vector2u textureSize = this->backgroundTexture.getSize();
@@ -55,7 +55,7 @@ void Game::initWorld()
     }
     else
     {
-       
+
         this->back_decor = new sf::Sprite(this->back_decorTexture);
 
         sf::Vector2u textureSize = this->back_decorTexture.getSize();
@@ -73,9 +73,9 @@ void Game::initWorld()
     }
     else
     {
-       
+
         this->battleground = new sf::Sprite(this->battlegroundTexture);
-       
+
         sf::Vector2u textureSize = this->battlegroundTexture.getSize();
 
         float scaleX = static_cast<float>(windowSize.x) / textureSize.x;
@@ -91,7 +91,7 @@ void Game::initWorld()
     }
     else
     {
-        
+
         this->front_decor = new sf::Sprite(this->front_decorTexture);
 
         sf::Vector2u textureSize = this->front_decorTexture.getSize();
@@ -109,9 +109,9 @@ void Game::initWorld()
     }
     else
     {
-      
+
         this->back_land = new sf::Sprite(this->back_landTexture);
-       
+
         sf::Vector2u textureSize = this->back_landTexture.getSize();
         float scaleX = static_cast<float>(windowSize.x) / textureSize.x;
         float scaleY = static_cast<float>(windowSize.x) / textureSize.y;
@@ -142,18 +142,18 @@ void Game::pollEvents()
     }
 }
 
-void Game::updatePlayer(const sf::Sprite& back_decor, const sf::Sprite& front_decor,sf::RenderTarget *target)
+void Game::updatePlayer(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target)
 {
     if (this->player)
     {
-        this->player->update(back_decor,front_decor,target);
+        this->player->update(back_decor, front_decor, target);
     }
 }
 
 void Game::update()
 {
     this->pollEvents();
-    this->updatePlayer(*back_decor,*front_decor,this->window);
+    this->updatePlayer(*back_decor, *front_decor, this->window);
 }
 
 // Render functions
