@@ -19,6 +19,9 @@ private:
     std::vector<sf::Text> mainMenuText;
     std::optional<sf::Event> menuEvent;
 
+    // sf::Texture backgroundTexture;
+    // sf::Sprite *backgroundSprite;
+
     int mainMenuSelected;
 
     void initFont();

@@ -63,25 +63,25 @@ void Player::updateMovement()
 
     bool isWalking = false;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         this->player->move({-this->playerSpeed, 0.f});
         this->animationState = MOVING_LEFT;
         isWalking = true;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         this->player->move({this->playerSpeed, 0.f});
         this->animationState = MOVING_RIGHT;
         isWalking = true;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         this->player->move({0.f, -this->playerSpeed});
         this->animationState = MOVING_UP;
         isWalking = true;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {
         this->player->move({0.f, this->playerSpeed});
         this->animationState = MOVING_DOWN;

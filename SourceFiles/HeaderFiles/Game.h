@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <ctime>
+#include <sstream>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -34,11 +35,36 @@ private:
     sf::Texture back_landTexture;
     sf::Sprite *back_land;
 
+    // For cron
+    sf::Text timerText;
+    sf::Font timerFont;
+    sf::Clock gameTimer;
+    int remainingTimeToInt;
+    float timerSpeed = 1.f;
+    bool gameIsRunning = true;
+    std::stringstream ssTime;
+
+    sf::RenderWindow *scoreWindow;
+    std::optional<sf::Event> scoreWindowEvent;
+
+    sf::Text scoreText;
+    sf::Font scoreFont;
+
+    int playerScore;
+
+    sf::Text currentScoreText;
+    std::stringstream ssScore;
+
     Player *player;
 
     void initWindow();
     void initPlayer();
     void initWorld();
+    void initTimerText();
+    void initTimerFont();
+    void initScoreWindow();
+    void initScoreTextAndFontForScoreWindow();
+    void initScoreText();
 
 public:
     Game();
@@ -46,16 +72,23 @@ public:
     // Updates
     void update();
     void updatePlayer(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target);
+    void updateTimer();
     void pollEvents();
+    void updateScoreWindow();
 
     // Render
     void render();
     void renderPlayer();
     void renderWorld(); // Everything about background etc
+    void renderTimerText();
+    void renderScoreWindow(); // this one is to render on "Score window"
+    void renderScoreText();   // this one is to render on "window"
 
     // Getters
     const sf::RenderWindow &getWindow() const;
+    bool getGameIsRunning();
 
+    void displayScoreOnWindow();
     void run();
 
     virtual ~Game();

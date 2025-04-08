@@ -29,17 +29,30 @@ void MainMenu::initText()
     this->mainMenuText.push_back(sf::Text(this->font, "About", 50));
     this->mainMenuText.push_back(sf::Text(this->font, "Exit", 50));
 
+    // Find the middle x in main menu window
+
+    sf::Vector2u menuWindowSize = this->MENU->getSize();
+    sf::FloatRect optionSize = this->mainMenuText[0].getGlobalBounds();
+
+    this->mainMenuText[0].setOrigin(sf::Vector2f({optionSize.position.x + optionSize.size.x / 2.f, optionSize.position.y + optionSize.size.y / 2.f}));
+
     // Play(Game class)
     this->mainMenuText[0].setFillColor(sf::Color(128, 0, 0));
-    this->mainMenuText[0].setPosition({350, 200});
+    this->mainMenuText[0].setPosition({menuWindowSize.x / 2.f, 200});
+
+    optionSize = this->mainMenuText[1].getGlobalBounds();
+    this->mainMenuText[1].setOrigin(sf::Vector2f({optionSize.position.x + optionSize.size.x / 2.f, optionSize.position.y + optionSize.size.y / 2.f}));
 
     // About
     this->mainMenuText[1].setFillColor(sf::Color::White);
-    this->mainMenuText[1].setPosition({350, 300});
+    this->mainMenuText[1].setPosition({menuWindowSize.x / 2.f, 300});
+
+    optionSize = this->mainMenuText[2].getGlobalBounds();
+    this->mainMenuText[2].setOrigin(sf::Vector2f({optionSize.position.x + optionSize.size.x / 2.f, optionSize.position.y + optionSize.size.y / 2.f}));
 
     // Exit
     this->mainMenuText[2].setFillColor(sf::Color::White);
-    this->mainMenuText[2].setPosition({350, 400});
+    this->mainMenuText[2].setPosition({menuWindowSize.x / 2.f, 400});
 
     this->mainMenuSelected = 0;
 }
