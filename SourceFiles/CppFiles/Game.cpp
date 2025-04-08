@@ -49,6 +49,8 @@ void Game::initScoreTextAndFontForScoreWindow()
     this->scoreText.setFont(this->scoreFont);
     this->scoreText.setCharacterSize(80);
     this->scoreText.setFillColor(sf::Color::White);
+    this->scoreText.setOutlineColor(sf::Color(128, 0, 0, 255));
+    this->scoreText.setOutlineThickness(3.5f);
 
     std::stringstream ss;
     ss << "Congratulations!\n"
@@ -94,6 +96,11 @@ void Game::initScoreText()
 
     this->currentScoreText.setString(ssScore.str());
     this->currentScoreText.setPosition(sf::Vector2f({1050.f, 660.f}));
+}
+
+void Game::initBackgroundScoreWindow()
+{
+    this->backgroundScoreWindow = new sf::Sprite(this->battlegroundTexture);
 }
 
 void Game::initWorld()
@@ -296,11 +303,17 @@ void Game::renderScoreText()
     this->window->draw(this->currentScoreText);
 }
 
+void Game::renderBackgroundScoreWindow()
+{
+    this->scoreWindow->draw(*this->backgroundScoreWindow);
+}
+
 void Game::renderScoreWindow()
 {
     this->scoreWindow->clear();
 
     // display the score
+    this->renderBackgroundScoreWindow();
     this->displayScoreOnWindow();
 
     this->scoreWindow->display();
@@ -348,6 +361,7 @@ void Game::run()
     if (this->remainingTimeToInt <= 0)
     {
         this->initScoreWindow();
+        this->initBackgroundScoreWindow();
         this->initScoreTextAndFontForScoreWindow();
         while (this->scoreWindow->isOpen())
         {
@@ -355,6 +369,7 @@ void Game::run()
 
             this->renderScoreWindow();
         }
+        delete this->backgroundScoreWindow;
     }
 }
 

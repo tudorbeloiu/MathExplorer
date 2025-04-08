@@ -55,6 +55,8 @@ private:
     sf::Text currentScoreText;
     std::stringstream ssScore;
 
+    sf::Sprite *backgroundScoreWindow;
+
     Player *player;
 
     void initWindow();
@@ -65,6 +67,7 @@ private:
     void initScoreWindow();
     void initScoreTextAndFontForScoreWindow();
     void initScoreText();
+    void initBackgroundScoreWindow();
 
 public:
     Game();
@@ -83,6 +86,7 @@ public:
     void renderTimerText();
     void renderScoreWindow(); // this one is to render on "Score window"
     void renderScoreText();   // this one is to render on "window"
+    void renderBackgroundScoreWindow();
 
     // Getters
     const sf::RenderWindow &getWindow() const;

@@ -3,6 +3,7 @@
 MainMenu::MainMenu(float width, float height)
 {
     this->initMainMenuVideo();
+    this->initBackgroundTexture();
     this->initFont();
     this->initText();
 }
@@ -12,6 +13,18 @@ void MainMenu::initMainMenuVideo()
     this->MENU = new sf::RenderWindow(sf::VideoMode({800, 600}), "Main menu", sf::Style::Close | sf::Style::Titlebar);
     this->MENU->setFramerateLimit(60);
     this->MENU->setVerticalSyncEnabled(false);
+}
+
+void MainMenu::initBackgroundTexture()
+{
+    if (!this->backgroundTexture.loadFromFile("Textures/battleground.png"))
+    {
+        std::cout << "Error initializing background texture!" << '\n';
+    }
+    else
+    {
+        this->backgroundSprite = new sf::Sprite(this->backgroundTexture);
+    }
 }
 
 void MainMenu::initFont()
@@ -129,6 +142,19 @@ void MainMenu::pollEvents()
                     if (choice == 1)
                     {
                         sf::RenderWindow *ABOUT = new sf::RenderWindow(sf::VideoMode({800, 600}), "About", sf::Style::Close | sf::Style::Titlebar);
+
+                        sf::Texture aboutBackgroundTexture;
+                        sf::Sprite *aboutBackground;
+
+                        if (!aboutBackgroundTexture.loadFromFile("Textures/battleground.png"))
+                        {
+                            std::cout << "Error opening about background texture!" << '\n';
+                        }
+                        else
+                        {
+                            aboutBackground = new sf::Sprite(aboutBackgroundTexture);
+                        }
+
                         while (ABOUT->isOpen())
                         {
                             std::optional<sf::Event> aboutEvent;
@@ -147,8 +173,10 @@ void MainMenu::pollEvents()
                                 }
                             }
                             ABOUT->clear();
+                            ABOUT->draw(*aboutBackground);
                             ABOUT->display();
                         }
+                        delete aboutBackground;
                     }
                     if (choice == 2)
                     {
@@ -166,10 +194,16 @@ void MainMenu::update()
     this->pollEvents();
 }
 
+void MainMenu::renderBackground()
+{
+    this->MENU->draw(*this->backgroundSprite);
+}
+
 void MainMenu::render()
 {
     this->MENU->clear();
 
+    this->renderBackground();
     this->draw(*MENU);
 
     this->MENU->display();
@@ -182,5 +216,6 @@ const sf::RenderWindow &MainMenu::getMenuWindow() const
 
 MainMenu::~MainMenu()
 {
+    delete this->backgroundSprite;
     delete this->MENU;
 }

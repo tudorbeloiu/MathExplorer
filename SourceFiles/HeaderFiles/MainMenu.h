@@ -19,14 +19,15 @@ private:
     std::vector<sf::Text> mainMenuText;
     std::optional<sf::Event> menuEvent;
 
-    // sf::Texture backgroundTexture;
-    // sf::Sprite *backgroundSprite;
+    sf::Texture backgroundTexture;
+    sf::Sprite *backgroundSprite;
 
     int mainMenuSelected;
 
     void initFont();
     void initText();
     void initMainMenuVideo();
+    void initBackgroundTexture();
 
 public:
     MainMenu(float width, float height);
@@ -39,6 +40,7 @@ public:
 
     void update();
     void render();
+    void renderBackground();
 
     int mainMenuPressed()
     {
