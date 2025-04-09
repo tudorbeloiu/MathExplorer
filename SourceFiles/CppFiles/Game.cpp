@@ -43,7 +43,7 @@ void Game::initScoreTextAndFontForScoreWindow()
 {
     if (!this->scoreFont.openFromFile("Fonts/planes.ttf"))
     {
-        std::cout << "Error opening score font!" << '\n';
+        throw LoadFontException("Failed to load font from Fonts/planes.ttf");
     }
 
     this->scoreText.setFont(this->scoreFont);
@@ -71,7 +71,7 @@ void Game::initTimerFont()
 {
     if (!this->timerFont.openFromFile("Fonts/timer.otf"))
     {
-        std::cout << "Error initializing timer font!" << '\n';
+        throw LoadFontException("Failed to load font from Fonts/timer.otf");
     }
 }
 
@@ -112,7 +112,7 @@ void Game::initWorld()
 
     if (!this->backgroundTexture.loadFromFile("Textures/background.png"))
     {
-        std::cout << "Error initializing background texture!" << '\n';
+        throw LoadTextureException("Error loading texture from Textures/background.png");
     }
     else
     {
@@ -130,7 +130,7 @@ void Game::initWorld()
     }
     if (!this->back_decorTexture.loadFromFile("Textures/back_decor.png"))
     {
-        std::cout << "Error initializing back_decor texture!" << '\n';
+        throw LoadTextureException("Error loading texture from Textures/back_decor.png");
     }
     else
     {
@@ -148,7 +148,7 @@ void Game::initWorld()
     }
     if (!this->battlegroundTexture.loadFromFile("Textures/battleground.png"))
     {
-        std::cout << "Error initializing battleground texture!" << '\n';
+        throw LoadTextureException("Error loading texture from Textures/battleground.png");
     }
     else
     {
@@ -166,7 +166,7 @@ void Game::initWorld()
     }
     if (!this->front_decorTexture.loadFromFile("Textures/front_decor.png"))
     {
-        std::cout << "Error initializing front_decor texture!" << '\n';
+        throw LoadTextureException("Error loading texture from Textures/front_decor.png");
     }
     else
     {
@@ -184,7 +184,7 @@ void Game::initWorld()
     }
     if (!this->back_landTexture.loadFromFile("Textures/back_land.png"))
     {
-        std::cout << "Error loading back_land texture!" << '\n';
+        throw LoadTextureException("Error loading texture from Textures/back_land.png");
     }
     else
     {

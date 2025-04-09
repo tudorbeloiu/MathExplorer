@@ -12,6 +12,8 @@
 #include <SFML/System.hpp>
 
 #include "Player.h"
+#include "Chest.h"
+#include "Exceptions.h"
 
 class Game
 {
