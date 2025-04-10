@@ -15,8 +15,7 @@
 class HardChest : public Chest
 {
 public:
-    HardChest(const std::string &pathToTexture, int pointsGained, float spawnChance, int questionType)
-        : Chest(pathToTexture, pointsGained, spawnChance, questionType) {}
+    HardChest(const std::string &pathToTexture, int pointsGained, float spawnChance, int questionType);
 
     std::string genQuestion() override;
 

@@ -42,6 +42,9 @@ public:
     int getQuestionType(int questionType) const;
     void update();
     void render(sf::RenderTarget &target);
+    void setPosition(sf::Vector2f newPos);
+
+    sf::Sprite &getSprite();
 
     virtual ~Chest() = default;
 };

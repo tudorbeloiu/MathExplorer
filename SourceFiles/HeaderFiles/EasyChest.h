@@ -15,8 +15,7 @@
 class EasyChest : public Chest
 {
 public:
-    EasyChest(const std::string &pathToTexture, int pointsGained, float spawnChance, int questionType)
-        : Chest(pathToTexture, pointsGained, spawnChance, questionType) {}
+    EasyChest(const std::string &pathToTexture, int pointsGained, float spawnChance, int questionType);
 
     std::string genQuestion() override;
 

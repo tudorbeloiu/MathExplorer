@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ctime>
 #include <sstream>
+#include <random>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -65,8 +66,11 @@ private:
     Player *player;
 
     // Chest implementation in game
-    std::unique_ptr<Chest> chest;
-    std::vector<std::unique_ptr<Chest>> chestsArray;
+    Chest *chest;
+    std::vector<Chest *> chestsArray;
+    sf::Clock chestsTimer;
+    int spawnerTime;
+    int maxNumberChests = 5;
 
     void initWindow();
     void initPlayer();
@@ -98,13 +102,17 @@ public:
     void renderScoreWindow(); // this one is to render on "Score window"
     void renderScoreText();   // this one is to render on "window"
     void renderBackgroundScoreWindow();
-    void renderChest();
+    void renderChests();
 
     // Getters
     const sf::RenderWindow &getWindow() const;
     bool getGameIsRunning();
 
-        void displayScoreOnWindow();
+    void displayScoreOnWindow();
+    int generateRandomNumber(int min, int max);
+    int generateChestType();
+    void chestSpawner();
+    sf::Vector2u avoidCollisionSpawn(Chest *chest);
     void run();
 
     virtual ~Game();

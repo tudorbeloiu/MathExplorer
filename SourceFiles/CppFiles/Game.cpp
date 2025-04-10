@@ -2,8 +2,9 @@
 
 Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(timerFont)
 {
-    this->remainingTimeToInt = 10;
+    this->remainingTimeToInt = 60;
     this->playerScore = 0;
+    this->spawnerTime = 2.f;
     this->initWindow();
     this->initWorld();
     this->initPlayer();
@@ -13,7 +14,6 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->initTimerFont();
     this->initTimerText();
     this->initScoreText();
-    this->initChest(3);
 }
 
 void Game::initWindow()
@@ -268,6 +268,7 @@ void Game::update()
 {
     this->pollEvents();
     this->updatePlayer(*back_decor, *front_decor, this->window);
+    this->chestSpawner();
     if (this->remainingTimeToInt > 0)
     {
         this->updateTimer();
@@ -320,9 +321,13 @@ void Game::renderScoreWindow()
     this->scoreWindow->display();
 }
 
-void Game::renderChest()
+void Game::renderChests()
 {
-    this->chest->render(*this->window);
+    for (int i = 0; i < this->chestsArray.size(); i++)
+    {
+        this->chestsArray[i]->render(*this->window);
+        std::cout << &this->chestsArray[i] << "\n";
+    }
 }
 
 void Game::render()
@@ -332,7 +337,7 @@ void Game::render()
     // Draw world stuff
     this->renderWorld();
     this->renderPlayer();
-    this->renderChest();
+    this->renderChests();
 
     // Draw all the stuff
     this->renderTimerText();
@@ -381,24 +386,118 @@ void Game::run()
 }
 
 // chest
+sf::Vector2u Game::avoidCollisionSpawn(Chest *chest)
+{
+    bool ok = false;
+    unsigned int pozX;
+    unsigned int pozY;
+    sf::Vector2u newPosition;
+    do
+    {
+        pozY = this->generateRandomNumber(188, 505 - 38);
+        pozX = this->generateRandomNumber(2, 1280 - 50);
+
+        chest->setPosition(static_cast<sf::Vector2f>(sf::Vector2u({pozX, pozY})));
+        ok = true;
+
+        sf::FloatRect newChestBounds = chest->getSprite().getGlobalBounds();
+
+        for (int i = 0; i < this->chestsArray.size(); i++)
+        {
+            sf::FloatRect chestBounds = this->chestsArray[i]->getSprite().getGlobalBounds();
+
+            if (newChestBounds.findIntersection(chestBounds))
+            {
+                ok = false;
+                break;
+            }
+        }
+
+    } while (ok == false);
+
+    newPosition.x = pozX;
+    newPosition.y = pozY;
+    return newPosition;
+}
+
 void Game::initChest(int difficulty)
 {
+
+    sf::Vector2u chestCoords;
+
     if (difficulty == 1)
     {
-        this->chest = std::make_unique<EasyChest>("Textures/Chest/easychest.png", 5, 50.f, 1);
+        this->chest = new EasyChest("Textures/Chest/easychest.png", 5, 50.f, 1);
+        chestCoords = this->avoidCollisionSpawn(this->chest);
     }
     else if (difficulty == 2)
     {
-        this->chest = std::make_unique<MediumChest>("Textures/Chest/mediumchest.png", 10, 30.f, 2);
+        this->chest = new MediumChest("Textures/Chest/mediumchest.png", 10, 30.f, 2);
+        chestCoords = this->avoidCollisionSpawn(this->chest);
     }
     else if (difficulty == 3)
     {
-        this->chest = std::make_unique<HardChest>("Textures/Chest/hardchest.png", 15, 20.f, 3);
+        this->chest = new HardChest("Textures/Chest/hardchest.png", 15, 20.f, 3);
+        chestCoords = this->avoidCollisionSpawn(this->chest);
     }
+    // std::cout << chestCoords.x << " " << chestCoords.y << " " << &this->chest << '\n';
+    chest->setPosition(static_cast<sf::Vector2f>(chestCoords));
+    chestsArray.push_back(chest);
+}
+
+void Game::chestSpawner()
+{
+    if (this->chestsTimer.getElapsedTime().asSeconds() >= this->spawnerTime)
+    {
+        int generatedType = this->generateChestType();
+
+        this->initChest(generatedType);
+
+        this->chestsTimer.restart();
+    }
+}
+
+int Game::generateChestType()
+{
+    // easy chest = spawn chance 50%
+    // medium chest = spawn chance 30%
+    // hard chest = spawn chance 20%
+
+    int myNumber = this->generateRandomNumber(0, 100);
+
+    if (myNumber <= 50)
+    {
+        return 1;
+    }
+    else if (myNumber > 50 && myNumber <= 80)
+    {
+        return 2;
+    }
+    else
+        return 3;
+}
+
+// Modern generate random number functions
+int Game::generateRandomNumber(int min, int max)
+{
+    // create a static random device, used only once to seed the generator
+    static std::random_device rd;
+
+    // initialize a "Mersenne Twister" random number generator with the random device seed
+    static std::mt19937 gen(rd());
+
+    // create an uniform int distribution between given parameters
+    // this ensures that every number in the range has an equal chance
+    std::uniform_int_distribution<> distrib(min, max);
+    return distrib(gen);
 }
 
 Game::~Game()
 {
+    for (int i = 0; i < chestsArray.size(); i++)
+    {
+        delete this->chestsArray[i];
+    }
     delete this->player;
     delete this->front_decor;
     delete this->back_decor;

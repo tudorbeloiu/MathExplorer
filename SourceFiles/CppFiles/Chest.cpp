@@ -12,6 +12,7 @@ Chest::Chest(const std::string &pathToTexture, int points, float spawnChance, in
         throw LoadTextureException("Failed to load chest texture from" + pathToTexture);
     }
     this->chestSprite = std::make_unique<sf::Sprite>(this->chestTexture);
+    this->chestSprite->setScale({2.f, 2.f});
 }
 
 Chest::Chest(const Chest &other)
@@ -68,7 +69,7 @@ void Chest::update()
         }
         if (this->questionType == 1)
         {
-            this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 36}, {40, 38});
+            this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 38}, {40, 38});
         }
         else if (this->questionType == 2)
         {
@@ -78,6 +79,7 @@ void Chest::update()
         {
             this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 32}, {40, 32});
         }
+        this->chestAnimationTimer.restart();
     }
 }
 
@@ -93,4 +95,14 @@ int Chest::getQuestionType(int questionType) const
 float Chest::getSpawnChance() const
 {
     return this->spawnChance;
+}
+
+void Chest::setPosition(sf::Vector2f newPos)
+{
+    this->chestSprite->setPosition(newPos);
+}
+
+sf::Sprite &Chest::getSprite()
+{
+    return *this->chestSprite;
 }
