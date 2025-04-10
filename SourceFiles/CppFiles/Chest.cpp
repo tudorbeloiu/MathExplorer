@@ -12,7 +12,7 @@ Chest::Chest(const std::string &pathToTexture, int points, float spawnChance, in
         throw LoadTextureException("Failed to load chest texture from" + pathToTexture);
     }
     this->chestSprite = std::make_unique<sf::Sprite>(this->chestTexture);
-    this->chestSprite->setScale({2.f, 2.f});
+    this->chestSprite->setScale({1.6f, 1.6f});
 }
 
 Chest::Chest(const Chest &other)

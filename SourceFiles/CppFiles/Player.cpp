@@ -187,6 +187,11 @@ void Player::setSpawnPoint(sf::Vector2f spawnPoint)
     this->player->setPosition(spawnPoint);
 }
 
+sf::Sprite &Player::getSprite()
+{
+    return *this->player;
+}
+
 Player::~Player()
 {
     delete this->player;

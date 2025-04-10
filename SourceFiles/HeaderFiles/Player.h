@@ -47,6 +47,7 @@ public:
     void render(sf::RenderTarget *target);
 
     void setSpawnPoint(sf::Vector2f spawnPoint);
+    sf::Sprite &getSprite();
 
     virtual ~Player();
 };

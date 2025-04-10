@@ -70,7 +70,7 @@ private:
     std::vector<Chest *> chestsArray;
     sf::Clock chestsTimer;
     int spawnerTime;
-    int maxNumberChests = 5;
+    int maxNumberChests;
 
     void initWindow();
     void initPlayer();
@@ -112,7 +112,10 @@ public:
     int generateRandomNumber(int min, int max);
     int generateChestType();
     void chestSpawner();
-    sf::Vector2u avoidCollisionSpawn(Chest *chest);
+    sf::Vector2u avoidCollisionSpawn(Chest *chest, Player *player);
+
+    void collisionWithEveryChest();
+
     void run();
 
     virtual ~Game();
