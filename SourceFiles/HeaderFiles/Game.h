@@ -14,6 +14,9 @@
 #include "Player.h"
 #include "Chest.h"
 #include "Exceptions.h"
+#include "EasyChest.h"
+#include "MediumChest.h"
+#include "HardChest.h"
 
 class Game
 {
@@ -61,6 +64,10 @@ private:
 
     Player *player;
 
+    // Chest implementation in game
+    std::unique_ptr<Chest> chest;
+    std::vector<std::unique_ptr<Chest>> chestsArray;
+
     void initWindow();
     void initPlayer();
     void initWorld();
@@ -70,6 +77,7 @@ private:
     void initScoreTextAndFontForScoreWindow();
     void initScoreText();
     void initBackgroundScoreWindow();
+    void initChest(int difficulty);
 
 public:
     Game();
@@ -80,6 +88,7 @@ public:
     void updateTimer();
     void pollEvents();
     void updateScoreWindow();
+    void updateChest();
 
     // Render
     void render();
@@ -89,12 +98,13 @@ public:
     void renderScoreWindow(); // this one is to render on "Score window"
     void renderScoreText();   // this one is to render on "window"
     void renderBackgroundScoreWindow();
+    void renderChest();
 
     // Getters
     const sf::RenderWindow &getWindow() const;
     bool getGameIsRunning();
 
-    void displayScoreOnWindow();
+        void displayScoreOnWindow();
     void run();
 
     virtual ~Game();

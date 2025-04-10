@@ -13,6 +13,7 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->initTimerFont();
     this->initTimerText();
     this->initScoreText();
+    this->initChest(3);
 }
 
 void Game::initWindow()
@@ -319,6 +320,11 @@ void Game::renderScoreWindow()
     this->scoreWindow->display();
 }
 
+void Game::renderChest()
+{
+    this->chest->render(*this->window);
+}
+
 void Game::render()
 {
     this->window->clear(); // First we clean the window
@@ -326,6 +332,7 @@ void Game::render()
     // Draw world stuff
     this->renderWorld();
     this->renderPlayer();
+    this->renderChest();
 
     // Draw all the stuff
     this->renderTimerText();
@@ -370,6 +377,23 @@ void Game::run()
             this->renderScoreWindow();
         }
         delete this->backgroundScoreWindow;
+    }
+}
+
+// chest
+void Game::initChest(int difficulty)
+{
+    if (difficulty == 1)
+    {
+        this->chest = std::make_unique<EasyChest>("Textures/Chest/easychest.png", 5, 50.f, 1);
+    }
+    else if (difficulty == 2)
+    {
+        this->chest = std::make_unique<MediumChest>("Textures/Chest/mediumchest.png", 10, 30.f, 2);
+    }
+    else if (difficulty == 3)
+    {
+        this->chest = std::make_unique<HardChest>("Textures/Chest/hardchest.png", 15, 20.f, 3);
     }
 }
 

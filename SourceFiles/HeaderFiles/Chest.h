@@ -21,10 +21,14 @@ protected:
     int questionType;
     float spawnChance;
 
+    sf::Clock chestAnimationTimer;
+    sf::IntRect currentFrame;
+    float animationSpeed = 0.1f;
+    int frameIndex = 0;
+
 public:
     Chest(const std::string &pathToTexture, int pointsGained, float spawnChance, int questionType);
     virtual std::string genQuestion() = 0;
-    virtual int getPointsGained() = 0;
 
     virtual std::unique_ptr<Chest> clone() const = 0;
     // Returns a smart pointer which cointains a Chest object(or derived)
@@ -33,8 +37,11 @@ public:
     Chest(const Chest &other);
     Chest &operator=(const Chest &other);
 
-    virtual float getSpawnChance() const = 0;
-    int getQuestionType() const;
+    int getPointsGained(int pointsGained) const;
+    float getSpawnChance() const;
+    int getQuestionType(int questionType) const;
+    void update();
+    void render(sf::RenderTarget &target);
 
     virtual ~Chest() = default;
 };
