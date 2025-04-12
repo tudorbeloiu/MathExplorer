@@ -223,12 +223,67 @@ void Game::pollEvents()
     }
 }
 
-void Game::updatePlayer(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target)
+void Game::updatePlayer(sf::RenderTarget *target)
 {
-    if (this->player)
+    this->player->updateMovement(dt);
+    sf::Vector2f velocity = this->player->getVelocity();
+    sf::FloatRect playerBounds = this->player->getSprite().getGlobalBounds();
+    sf::FloatRect nextPos = playerBounds;
+
+    for (auto chest : this->chestsArray)
     {
-        this->player->update(back_decor, front_decor, target);
+        sf::FloatRect playerBounds = this->player->getSprite().getGlobalBounds();
+        sf::FloatRect chestBounds = chest->getSprite().getGlobalBounds();
+        nextPos = playerBounds;
+        chestBounds.size.x -= 62.f;
+        chestBounds.size.y -= 30.f;
+        chestBounds.position.x += 31.f;
+        chestBounds.position.y += 15.f;
+
+        nextPos.position.x += velocity.x;
+        nextPos.position.y += velocity.y;
+
+        if (nextPos.findIntersection(chestBounds))
+        {
+            // bottom
+            if (velocity.y < 0)
+            {
+                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 42.f)
+                {
+                    velocity.y = 0;
+                    this->player->setPosition({playerBounds.position.x, chestBounds.position.y + chestBounds.size.y - playerBounds.size.y + 42.f});
+                }
+            }
+            // right
+            else if (velocity.x > 0)
+            {
+                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 30.f)
+                {
+                    if (playerBounds.position.x + playerBounds.size.x >= chestBounds.position.x)
+                    {
+                        velocity.x = 0.f;
+                        this->player->setPosition({chestBounds.position.x - playerBounds.size.x, playerBounds.position.y});
+                    }
+                }
+            }
+            // left
+            else if (velocity.x < 0)
+            {
+                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 30.f)
+                {
+                    if (playerBounds.position.x <= chestBounds.position.x + chestBounds.size.x)
+                    {
+                        velocity.x = 0.f;
+                        this->player->setPosition({chestBounds.position.x + chestBounds.size.x, playerBounds.position.y});
+                    }
+                }
+            }
+        }
     }
+
+    this->player->getSprite().move(velocity);
+    this->player->updateAnimations();
+    this->player->updateCollision(this->window);
 }
 
 void Game::updateTimer()
@@ -265,68 +320,19 @@ void Game::updateScoreWindow()
     }
 }
 
-void Game::collisionWithEveryChest()
-{
-    sf::FloatRect playerBounds = this->player->getSprite().getGlobalBounds();
-    sf::Vector2f playerPos = this->player->getSprite().getPosition();
-
-    const float margin = 20.f;
-
-    for (int i = 0; i < this->chestsArray.size(); i++)
-    {
-        sf::FloatRect chestBounds = this->chestsArray[i]->getSprite().getGlobalBounds();
-        if (playerBounds.findIntersection(chestBounds))
-        {
-            sf::Vector2f playerCenter = playerBounds.position + playerBounds.size / 2.f;
-            sf::Vector2f chestCenter = chestBounds.position + chestBounds.size / 2.f;
-
-            float dx = playerCenter.x - chestCenter.x;
-            float dy = playerCenter.y - chestCenter.y;
-
-            float intersectX = (playerBounds.size.x / 2.f + chestBounds.size.x / 2.f) - std::abs(dx) - margin;
-            float intersectY = (playerBounds.size.y / 2.f + chestBounds.size.y / 2.f) - std::abs(dy) - margin;
-
-            if (intersectX > 0 && intersectY > 0)
-            {
-
-                if (intersectX < intersectY)
-                {
-                    if (dx > 0)
-                    {
-                        playerPos.x = playerPos.x + intersectX;
-                    }
-                    else
-                    {
-                        playerPos.x = playerPos.x - intersectX;
-                    }
-                }
-                else
-                {
-                    if (dy > 0)
-                    {
-                        playerPos.y = playerPos.y + intersectY;
-                    }
-                    else
-                    {
-                        playerPos.y = playerPos.y - intersectY;
-                    }
-                }
-                this->player->getSprite().setPosition(playerPos);
-                playerBounds = this->player->getSprite().getGlobalBounds();
-            }
-        }
-    }
-}
-
 void Game::update()
 {
     this->pollEvents();
-    this->updatePlayer(*back_decor, *front_decor, this->window);
+    this->updatePlayer(this->window);
     if (this->chestsArray.size() < this->maxNumberChests)
     {
         this->chestSpawner();
     }
-    this->collisionWithEveryChest();
+    if (this->interactWithChest() != nullptr)
+    {
+        // if player interacts with a chest, we render the animation for that chest
+        this->interactWithChest()->update();
+    }
     if (this->remainingTimeToInt > 0)
     {
         this->updateTimer();
@@ -393,8 +399,8 @@ void Game::render()
 
     // Draw world stuff
     this->renderWorld();
-    this->renderPlayer();
     this->renderChests();
+    this->renderPlayer();
 
     // Draw all the stuff
     this->renderTimerText();
@@ -423,6 +429,7 @@ void Game::run()
 {
     while (this->window->isOpen() && this->gameIsRunning == true)
     {
+        dt = dt_clock.restart().asSeconds();
         this->update();
         this->render();
     }
@@ -451,8 +458,8 @@ sf::Vector2u Game::avoidCollisionSpawn(Chest *chest, Player *player)
     sf::Vector2u newPosition;
     do
     {
-        pozY = this->generateRandomNumber(188, 505);
-        pozX = this->generateRandomNumber(2, 1280 - 50);
+        pozY = this->generateRandomNumber(210, 505);
+        pozX = this->generateRandomNumber(2, 1280 - 125);
 
         chest->setPosition(static_cast<sf::Vector2f>(sf::Vector2u({pozX, pozY})));
         ok = true;
@@ -540,6 +547,32 @@ int Game::generateChestType()
     }
     else
         return 3;
+}
+
+Chest *Game::interactWithChest()
+{
+    sf::FloatRect playerBounds = this->player->getSprite().getGlobalBounds();
+    sf::Vector2f playerCenter = playerBounds.position + playerBounds.size / 2.f;
+
+    for (int i = 0; i < this->chestsArray.size(); i++)
+    {
+        sf::FloatRect chestBounds = this->chestsArray[i]->getSprite().getGlobalBounds();
+        sf::Vector2f chestCenter = chestBounds.position + chestBounds.size / 2.f;
+
+        float dx = playerCenter.x - chestCenter.x;
+        float dy = playerCenter.y - chestCenter.y;
+
+        float distance = std::sqrt(dx * dx + dy * dy);
+        if (distance < 10.f)
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
+            {
+                return this->chestsArray[i];
+                break;
+            }
+        }
+    }
+    return nullptr;
 }
 
 // Modern generate random number functions

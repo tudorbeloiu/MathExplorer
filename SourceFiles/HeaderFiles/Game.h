@@ -64,6 +64,8 @@ private:
     sf::Sprite *backgroundScoreWindow;
 
     Player *player;
+    sf::Clock dt_clock;
+    float dt;
 
     // Chest implementation in game
     Chest *chest;
@@ -88,7 +90,7 @@ public:
 
     // Updates
     void update();
-    void updatePlayer(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target);
+    void updatePlayer(sf::RenderTarget *target);
     void updateTimer();
     void pollEvents();
     void updateScoreWindow();
@@ -114,7 +116,7 @@ public:
     void chestSpawner();
     sf::Vector2u avoidCollisionSpawn(Chest *chest, Player *player);
 
-    void collisionWithEveryChest();
+    Chest *interactWithChest();
 
     void run();
 

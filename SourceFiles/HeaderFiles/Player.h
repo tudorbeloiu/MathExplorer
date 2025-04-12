@@ -25,10 +25,15 @@ private:
     sf::Texture playerTextureWalk;
     sf::Sprite *player;
 
+    sf::Vector2f velocity;
+    float movementSpeed;
+
+    sf::Clock dt_clock;
+    float dt;
+
     sf::IntRect currentFrame;
     sf::Clock animationTimer;
 
-    float playerSpeed = 3.8f;
     float animationSpeed = 0.1f;
     short animationState = 0;
     int frameIndex = 0;
@@ -39,15 +44,17 @@ private:
 public:
     Player();
 
-    void update(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target);
-    void updateMovement();
-    void updateCollision(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target);
+    void updateMovement(float dt);
+    void updateCollision(sf::RenderTarget *target);
     void updateAnimations();
 
     void render(sf::RenderTarget *target);
 
     void setSpawnPoint(sf::Vector2f spawnPoint);
     sf::Sprite &getSprite();
+    sf::Vector2f getVelocity();
+    void setVelocity(sf::Vector2f velocity);
+    void setPosition(sf::Vector2f setPos);
 
     virtual ~Player();
 };

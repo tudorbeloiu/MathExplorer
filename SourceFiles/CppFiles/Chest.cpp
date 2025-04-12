@@ -79,6 +79,7 @@ void Chest::update()
         {
             this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 32}, {40, 32});
         }
+        this->chestSprite->setTextureRect(this->currentFrame);
         this->chestAnimationTimer.restart();
     }
 }

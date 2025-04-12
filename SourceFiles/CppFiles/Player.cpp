@@ -5,7 +5,7 @@ Player::Player()
     this->animationState = IDLE;
     this->initTexture();
     this->initSprite();
-    this->playerSpeed = 3.8f;
+    this->movementSpeed = 175.f;
 }
 
 void Player::initTexture()
@@ -58,36 +58,32 @@ void Player::updateAnimations()
     }
 }
 
-void Player::updateMovement()
+void Player::updateMovement(float dt)
 {
-
-    bool isWalking = false;
+    this->velocity.y = 0.f;
+    this->velocity.x = 0.f;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
-        this->player->move({-this->playerSpeed, 0.f});
+        this->velocity.x += -this->movementSpeed * dt;
         this->animationState = MOVING_LEFT;
-        isWalking = true;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
-        this->player->move({this->playerSpeed, 0.f});
+        this->velocity.x += this->movementSpeed * dt;
         this->animationState = MOVING_RIGHT;
-        isWalking = true;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
-        this->player->move({0.f, -this->playerSpeed});
+        this->velocity.y += -this->movementSpeed * dt;
         this->animationState = MOVING_UP;
-        isWalking = true;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {
-        this->player->move({0.f, this->playerSpeed});
+        this->velocity.y += this->movementSpeed * dt;
         this->animationState = MOVING_DOWN;
-        isWalking = true;
     }
-    if (isWalking == false)
+    if (this->velocity == sf::Vector2f(0.f, 0.f))
     {
         this->currentFrame = sf::IntRect({0, 3 * 48}, {40, 48});
         this->player->setTexture(this->playerTextureIdle);
@@ -100,11 +96,9 @@ void Player::updateMovement()
     }
 }
 
-void Player::updateCollision(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target)
+void Player::updateCollision(sf::RenderTarget *target)
 {
     sf::FloatRect playerBounds = this->player->getGlobalBounds();
-    sf::FloatRect back_decorBounds = back_decor.getGlobalBounds();
-    sf::FloatRect front_decorBounds = front_decor.getGlobalBounds();
 
     sf::Vector2f newPos = this->player->getPosition();
     if (playerBounds.position.x <= 113)
@@ -167,13 +161,6 @@ void Player::updateCollision(const sf::Sprite &back_decor, const sf::Sprite &fro
     this->player->setPosition(newPos);
 }
 
-void Player::update(const sf::Sprite &back_decor, const sf::Sprite &front_decor, sf::RenderTarget *target)
-{
-    this->updateMovement();
-    this->updateAnimations();
-    this->updateCollision(back_decor, front_decor, target);
-}
-
 void Player::render(sf::RenderTarget *target)
 {
     if (this->player)
@@ -190,6 +177,21 @@ void Player::setSpawnPoint(sf::Vector2f spawnPoint)
 sf::Sprite &Player::getSprite()
 {
     return *this->player;
+}
+
+sf::Vector2f Player::getVelocity()
+{
+    return this->velocity;
+}
+
+void Player::setVelocity(sf::Vector2f velocity)
+{
+    this->velocity = velocity;
+}
+
+void Player::setPosition(sf::Vector2f setPos)
+{
+    this->player->setPosition(setPos);
 }
 
 Player::~Player()
