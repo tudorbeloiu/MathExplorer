@@ -396,6 +396,14 @@ void Game::update()
     {
         this->chestSpawner();
     }
+    if (this->overlayChest)
+    {
+        if (this->stillInteracting() == false)
+        {
+            this->overlayActive = false;
+            this->overlayChest = nullptr;
+        }
+    }
     if (this->interactWithChest() != nullptr)
     {
         // if player interacts with a chest, we render the animation for that chest
@@ -531,7 +539,7 @@ sf::Vector2u Game::avoidCollisionSpawn(Chest *chest, Player *player)
     sf::Vector2u newPosition;
     do
     {
-        pozY = this->generateRandomNumber(210, 505);
+        pozY = this->generateRandomNumber(230, 550);
         pozX = this->generateRandomNumber(2, 1280 - 125);
 
         chest->setPosition(static_cast<sf::Vector2f>(sf::Vector2u({pozX, pozY})));
