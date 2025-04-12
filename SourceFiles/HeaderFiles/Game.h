@@ -5,6 +5,7 @@
 #include <ctime>
 #include <sstream>
 #include <random>
+#include <algorithm>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -78,6 +79,9 @@ private:
     bool renderChestOverlay = false;
     bool overlayActive;
 
+    sf::Clock chestAnimationTimer;
+    Chest *openChest;
+
     void initWindow();
     void initPlayer();
     void initWorld();
@@ -122,7 +126,7 @@ public:
 
     bool stillInteracting();
 
-    Chest *interactWithChest();
+    bool interactWithChest();
 
     void run();
 

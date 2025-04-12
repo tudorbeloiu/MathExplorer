@@ -13,6 +13,8 @@ Chest::Chest(const std::string &pathToTexture, int points, float spawnChance, in
     }
     this->chestSprite = std::make_unique<sf::Sprite>(this->chestTexture);
     this->chestSprite->setScale({1.6f, 1.6f});
+    this->animationFinished = false;
+    this->frameIndex = 0;
 }
 
 Chest::Chest(const Chest &other)
@@ -56,10 +58,9 @@ void Chest::render(sf::RenderTarget &target)
     }
 }
 
-void Chest::update()
+void Chest::update(sf::Clock chestAnimationTimer)
 {
-    bool animationFinished = false;
-    if (this->chestAnimationTimer.getElapsedTime().asSeconds() >= this->animationSpeed && animationFinished == false)
+    if (chestAnimationTimer.getElapsedTime().asSeconds() >= this->animationSpeed && animationFinished == false)
     {
         this->frameIndex++;
         if (this->frameIndex == 5)
@@ -69,18 +70,18 @@ void Chest::update()
         }
         if (this->questionType == 1)
         {
-            this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 38}, {40, 38});
+            this->currentFrame = sf::IntRect({this->frameIndex * 48, 0 * 38}, {48, 38});
         }
         else if (this->questionType == 2)
         {
-            this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 36}, {40, 36});
+            this->currentFrame = sf::IntRect({this->frameIndex * 48, 0 * 36}, {48, 36});
         }
         else if (this->questionType == 3)
         {
-            this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 32}, {40, 32});
+            this->currentFrame = sf::IntRect({this->frameIndex * 48, 0 * 32}, {48, 32});
         }
         this->chestSprite->setTextureRect(this->currentFrame);
-        this->chestAnimationTimer.restart();
+        chestAnimationTimer.restart();
     }
 }
 
@@ -101,6 +102,11 @@ float Chest::getSpawnChance() const
 void Chest::setPosition(sf::Vector2f newPos)
 {
     this->chestSprite->setPosition(newPos);
+}
+
+bool Chest::getAnimationFinished()
+{
+    return this->animationFinished;
 }
 
 sf::Sprite &Chest::getSprite()

@@ -404,10 +404,23 @@ void Game::update()
             this->overlayChest = nullptr;
         }
     }
-    if (this->interactWithChest() != nullptr)
+    if (this->interactWithChest())
     {
         // if player interacts with a chest, we render the animation for that chest
-        this->interactWithChest()->update();
+        this->openChest->update(this->chestAnimationTimer);
+        if (this->openChest->getAnimationFinished())
+        {
+            std::cout << this->openChest->genQuestion() << '\n';
+            auto it = std::find(this->chestsArray.begin(), this->chestsArray.end(), this->openChest);
+            if (it != this->chestsArray.end())
+            {
+                this->overlayActive = false;
+                this->overlayChest = nullptr;
+                delete *it;
+                this->chestsArray.erase(it);
+            }
+            this->openChest = nullptr;
+        }
     }
     if (this->remainingTimeToInt > 0)
     {
@@ -630,30 +643,24 @@ int Game::generateChestType()
         return 3;
 }
 
-Chest *Game::interactWithChest()
+bool Game::interactWithChest()
 {
     sf::FloatRect playerBounds = this->player->getSprite().getGlobalBounds();
-    sf::Vector2f playerCenter = playerBounds.position + playerBounds.size / 2.f;
 
     for (int i = 0; i < this->chestsArray.size(); i++)
     {
         sf::FloatRect chestBounds = this->chestsArray[i]->getSprite().getGlobalBounds();
-        sf::Vector2f chestCenter = chestBounds.position + chestBounds.size / 2.f;
 
-        float dx = playerCenter.x - chestCenter.x;
-        float dy = playerCenter.y - chestCenter.y;
-
-        float distance = std::sqrt(dx * dx + dy * dy);
-        if (distance < 10.f)
+        if (playerBounds.findIntersection(chestBounds))
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
             {
-                return this->chestsArray[i];
-                break;
+                this->openChest = this->chestsArray[i];
+                return true;
             }
         }
     }
-    return nullptr;
+    return false;
 }
 
 // Modern generate random number functions

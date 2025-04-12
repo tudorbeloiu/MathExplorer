@@ -21,10 +21,10 @@ protected:
     int questionType;
     float spawnChance;
 
-    sf::Clock chestAnimationTimer;
     sf::IntRect currentFrame;
-    float animationSpeed = 0.1f;
-    int frameIndex = 0;
+    float animationSpeed = 1.5f;
+    int frameIndex;
+    bool animationFinished;
 
 public:
     Chest(const std::string &pathToTexture, int pointsGained, float spawnChance, int questionType);
@@ -40,9 +40,11 @@ public:
     int getPointsGained(int pointsGained) const;
     float getSpawnChance() const;
     int getQuestionType(int questionType) const;
-    void update();
+    void update(sf::Clock chestAnimationTimer);
     void render(sf::RenderTarget &target);
     void setPosition(sf::Vector2f newPos);
+
+    bool getAnimationFinished();
 
     sf::Sprite &getSprite();
 
