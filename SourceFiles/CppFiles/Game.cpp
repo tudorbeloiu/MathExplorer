@@ -15,6 +15,8 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->initTimerText();
     this->initScoreText();
     this->maxNumberChests = 5;
+    this->overlayChest = nullptr;
+    this->overlayActive = false;
 }
 
 void Game::initWindow()
@@ -223,12 +225,40 @@ void Game::pollEvents()
     }
 }
 
+bool Game::stillInteracting()
+{
+    this->player->updateMovement(dt);
+    sf::Vector2f velocity = this->player->getVelocity();
+    sf::FloatRect playerBounds = this->player->getSprite().getGlobalBounds();
+    sf::FloatRect overlayChestBounds = this->overlayChest->getSprite().getGlobalBounds();
+    sf::FloatRect nextPos = playerBounds;
+
+    nextPos = playerBounds;
+    overlayChestBounds.size.x -= 62.f;
+    overlayChestBounds.size.y -= 30.f;
+    overlayChestBounds.position.x += 31.f;
+    overlayChestBounds.position.y += 15.f;
+
+    nextPos.position.x += velocity.x;
+    nextPos.position.y += velocity.y;
+
+    if (nextPos.findIntersection(overlayChestBounds))
+    {
+        return true;
+    }
+    return false;
+}
+
 void Game::updatePlayer(sf::RenderTarget *target)
 {
     this->player->updateMovement(dt);
     sf::Vector2f velocity = this->player->getVelocity();
     sf::FloatRect playerBounds = this->player->getSprite().getGlobalBounds();
     sf::FloatRect nextPos = playerBounds;
+
+    bool collisionHandled = false;
+
+    // std::cout << "Velocity.x: " << velocity.x << " Velocity.y: " << velocity.y << '\n';
 
     for (auto chest : this->chestsArray)
     {
@@ -245,37 +275,75 @@ void Game::updatePlayer(sf::RenderTarget *target)
 
         if (nextPos.findIntersection(chestBounds))
         {
-            // bottom
-            if (velocity.y < 0)
+            if (velocity.y > 0)
             {
-                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 42.f)
+                if (playerBounds.position.y + playerBounds.size.y >= chestBounds.position.y + chestBounds.size.y / 2.f &&
+                    playerBounds.position.y + playerBounds.size.y - chestBounds.position.y - chestBounds.size.y / 2.f <= 10.f)
+                {
+                    this->overlayChest = chest;
+                    overlayActive = true;
+                }
+            }
+
+            // bottom
+            else if (velocity.y < 0)
+            {
+                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 42.f &&
+                    chestBounds.position.y + chestBounds.size.y - playerBounds.position.y - playerBounds.size.y <= -30.f)
                 {
                     velocity.y = 0;
-                    this->player->setPosition({playerBounds.position.x, chestBounds.position.y + chestBounds.size.y - playerBounds.size.y + 42.f});
+                    // this->player->setPosition({playerBounds.position.x, chestBounds.position.y + chestBounds.size.y - playerBounds.size.y + 40.f});
+                    overlayActive = false;
                 }
             }
             // right
             else if (velocity.x > 0)
             {
-                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 30.f)
+                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 30.f &&
+                    playerBounds.position.y + playerBounds.size.y >= chestBounds.position.y + 20.f)
                 {
                     if (playerBounds.position.x + playerBounds.size.x >= chestBounds.position.x)
                     {
-                        velocity.x = 0.f;
-                        this->player->setPosition({chestBounds.position.x - playerBounds.size.x, playerBounds.position.y});
+                        this->overlayChest = chest;
+                        overlayActive = true;
                     }
                 }
             }
             // left
             else if (velocity.x < 0)
             {
-                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 30.f)
+                if (playerBounds.position.y + playerBounds.size.y <= chestBounds.position.y + chestBounds.size.y + 30.f &&
+                    playerBounds.position.y + playerBounds.size.y >= chestBounds.position.y + 20.f)
                 {
                     if (playerBounds.position.x <= chestBounds.position.x + chestBounds.size.x)
                     {
-                        velocity.x = 0.f;
-                        this->player->setPosition({chestBounds.position.x + chestBounds.size.x, playerBounds.position.y});
+                        this->overlayChest = chest;
+                        overlayActive = true;
                     }
+                }
+            }
+        }
+    }
+
+    if (!overlayActive)
+    {
+        this->overlayChest = nullptr;
+    }
+    else
+    {
+        sf::FloatRect overlayChestBounds = this->overlayChest->getSprite().getGlobalBounds();
+        playerBounds = this->player->getSprite().getGlobalBounds();
+
+        overlayChestBounds.size.x += 40.f;
+        overlayChestBounds.position.x += 35.f;
+
+        if (velocity.y > 0)
+        {
+            if (playerBounds.position.y + playerBounds.size.y >= overlayChestBounds.size.y + overlayChestBounds.position.y + 10.f && playerBounds.position.y + playerBounds.size.y - overlayChestBounds.position.y - overlayChestBounds.size.y <= 12.f)
+            {
+                if (playerBounds.position.x + playerBounds.size.x >= overlayChestBounds.position.x && playerBounds.position.x + playerBounds.size.x <= overlayChestBounds.size.x + overlayChestBounds.position.x)
+                {
+                    velocity.y = 0;
                 }
             }
         }
@@ -401,6 +469,11 @@ void Game::render()
     this->renderWorld();
     this->renderChests();
     this->renderPlayer();
+
+    if (this->overlayActive && this->stillInteracting())
+    {
+        this->window->draw(this->overlayChest->getSprite());
+    }
 
     // Draw all the stuff
     this->renderTimerText();

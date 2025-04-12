@@ -74,6 +74,10 @@ private:
     int spawnerTime;
     int maxNumberChests;
 
+    Chest *overlayChest;
+    bool renderChestOverlay = false;
+    bool overlayActive;
+
     void initWindow();
     void initPlayer();
     void initWorld();
@@ -115,6 +119,8 @@ public:
     int generateChestType();
     void chestSpawner();
     sf::Vector2u avoidCollisionSpawn(Chest *chest, Player *player);
+
+    bool stillInteracting();
 
     Chest *interactWithChest();
 

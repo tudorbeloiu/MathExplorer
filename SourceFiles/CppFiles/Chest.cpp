@@ -75,7 +75,7 @@ void Chest::update()
         {
             this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 36}, {40, 36});
         }
-        else if (this->questionType == 2)
+        else if (this->questionType == 3)
         {
             this->currentFrame = sf::IntRect({this->frameIndex * 40, 0 * 32}, {40, 32});
         }
