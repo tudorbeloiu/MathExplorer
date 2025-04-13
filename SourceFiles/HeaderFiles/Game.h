@@ -19,6 +19,7 @@
 #include "EasyChest.h"
 #include "MediumChest.h"
 #include "HardChest.h"
+#include "Paper.h"
 
 class Game
 {
@@ -82,6 +83,10 @@ private:
     sf::Clock chestAnimationTimer;
     Chest *openChest;
 
+    // Question spawn
+    std::unique_ptr<Paper> questionPaper;
+    bool renderNow;
+
     void initWindow();
     void initPlayer();
     void initWorld();
@@ -92,6 +97,7 @@ private:
     void initScoreText();
     void initBackgroundScoreWindow();
     void initChest(int difficulty);
+    void initQuestionPaper(std::string questionText);
 
 public:
     Game();

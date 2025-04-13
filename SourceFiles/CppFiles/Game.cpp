@@ -17,6 +17,7 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->maxNumberChests = 5;
     this->overlayChest = nullptr;
     this->overlayActive = false;
+    this->renderNow = false;
 }
 
 void Game::initWindow()
@@ -41,6 +42,23 @@ void Game::initPlayer()
 {
     this->player = new Player();
     this->player->setSpawnPoint(sf::Vector2f({450.f, 500.f}));
+}
+
+void Game::initQuestionPaper(std::string questionText)
+{
+    std::string questionBuffer = questionText;
+    try
+    {
+        questionPaper = std::make_unique<Paper>(questionText, this->window);
+    }
+    catch (const LoadTextureException &e)
+    {
+        std::cerr << "Error: " << e.what() << '\n';
+    }
+    catch (const LoadFontException &e)
+    {
+        std::cerr << "Error: " << e.what() << '\n';
+    }
 }
 
 void Game::initScoreTextAndFontForScoreWindow()
@@ -410,7 +428,8 @@ void Game::update()
         this->openChest->update(this->chestAnimationTimer);
         if (this->openChest->getAnimationFinished())
         {
-            std::cout << this->openChest->genQuestion() << '\n';
+            this->initQuestionPaper(this->openChest->genQuestion());
+            this->renderNow = true;
             auto it = std::find(this->chestsArray.begin(), this->chestsArray.end(), this->openChest);
             if (it != this->chestsArray.end())
             {
@@ -494,6 +513,11 @@ void Game::render()
     if (this->overlayActive && this->stillInteracting())
     {
         this->window->draw(this->overlayChest->getSprite());
+    }
+
+    if (this->renderNow == true)
+    {
+        this->questionPaper->render(this->window);
     }
 
     // Draw all the stuff
@@ -653,7 +677,7 @@ bool Game::interactWithChest()
 
         if (playerBounds.findIntersection(chestBounds))
         {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G))
             {
                 this->openChest = this->chestsArray[i];
                 return true;
