@@ -18,6 +18,7 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->overlayChest = nullptr;
     this->overlayActive = false;
     this->renderNow = false;
+    this->renderWrongAnswer = false;
 }
 
 void Game::initWindow()
@@ -245,6 +246,7 @@ void Game::pollEvents()
                 {
                     if (this->inputBuffer.size() > 0)
                     {
+                        this->renderWrongAnswer = false;
                         this->inputBuffer.pop_back();
                         this->questionPaper->setInputText(this->inputBuffer);
                     }
@@ -253,10 +255,47 @@ void Game::pollEvents()
                 {
                     if (this->questionPaper)
                     {
+                        this->renderWrongAnswer = false;
                         this->questionPaper.reset();
                         this->inputBuffer = "";
                         this->renderNow = false;
                         this->deleteChest(this->openChest);
+                    }
+                }
+                if (keyCode->code == sf::Keyboard::Key::Enter)
+                {
+                    if (this->questionPaper)
+                    {
+                        if (this->inputBuffer != "")
+                        {
+                            if (this->validateBuffer(this->inputBuffer))
+                            {
+                                std::string questionResult = this->openChest->solveQuestion(this->openChest->genQuestion());
+                                std::string playerResult = this->inputBuffer;
+
+                                if (strcmp(questionResult.c_str(), playerResult.c_str()) == 0)
+                                {
+                                    int numberOfPointsGained = this->openChest->getPointsGained();
+                                    this->playerScore += numberOfPointsGained;
+
+                                    this->renderWrongAnswer = false;
+
+                                    this->questionPaper.reset();
+                                    this->inputBuffer = "";
+                                    this->renderNow = false;
+                                    this->deleteChest(this->openChest);
+                                }
+                                else
+                                {
+                                    // Wrong answer display
+                                    this->renderWrongAnswer = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            this->renderWrongAnswer = true;
+                        }
                     }
                 }
             }
@@ -420,6 +459,13 @@ void Game::updateTimer()
     }
 }
 
+void Game::updateScoreText()
+{
+    std::stringstream newScore;
+    newScore << "Score: " << this->playerScore;
+    this->currentScoreText.setString(newScore.str());
+}
+
 void Game::updateScoreWindow()
 {
     while (this->scoreWindowEvent = this->scoreWindow->pollEvent())
@@ -466,6 +512,7 @@ void Game::update()
             this->renderNow = true;
         }
     }
+    this->updateScoreText();
     if (this->remainingTimeToInt > 0)
     {
         this->updateTimer();
@@ -556,6 +603,10 @@ void Game::render()
     if (this->renderNow == true)
     {
         this->questionPaper->render(this->window);
+        if (this->renderWrongAnswer == true)
+        {
+            this->questionPaper->renderWrongText(this->window);
+        }
     }
 
     // Draw all the stuff
@@ -738,6 +789,19 @@ int Game::generateRandomNumber(int min, int max)
     // this ensures that every number in the range has an equal chance
     std::uniform_int_distribution<> distrib(min, max);
     return distrib(gen);
+}
+
+bool Game::validateBuffer(std::string inputText)
+{
+    for (int i = 0; i < inputText.size(); i++)
+    {
+        if (isdigit(inputText[i]) == false)
+        {
+            if (inputText[i] != '-' && inputText[i] != '+')
+                return false;
+        }
+    }
+    return true;
 }
 
 Game::~Game()

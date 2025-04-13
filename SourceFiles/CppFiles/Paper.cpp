@@ -1,6 +1,6 @@
 #include "../HeaderFiles/Paper.h"
 
-Paper::Paper(std::string questionBuffer, sf::RenderTarget *target) : questionText(font), sprite(nullptr), inputText(font)
+Paper::Paper(std::string questionBuffer, sf::RenderTarget *target) : questionText(font), sprite(nullptr), inputText(font), wrongAnswerText(wrongFont)
 {
     this->initTexture();
     this->initSprite(target);
@@ -33,6 +33,10 @@ void Paper::initText()
     {
         throw LoadFontException("Failed to load timer.otf");
     }
+    if (!this->wrongFont.openFromFile("Fonts/planes.ttf"))
+    {
+        throw LoadFontException("Failed to load planes.ttf");
+    }
     this->questionText.setFont(this->font);
     this->questionText.setCharacterSize(40);
     this->questionText.setFillColor(sf::Color(100, 0, 0, 255));
@@ -46,7 +50,14 @@ void Paper::initText()
     this->inputText.setFillColor(sf::Color(50, 0, 0, 255));
     this->inputText.setString("");
     sf::FloatRect iTextSize = this->inputText.getGlobalBounds();
-    this->inputText.setPosition(sf::Vector2f({spriteBounds.position.x + spriteBounds.size.x / 2.f - iTextSize.size.x / 2.f, spriteBounds.position.y + 300.f}));
+    this->inputText.setPosition(sf::Vector2f({spriteBounds.position.x + spriteBounds.size.x / 2.f - iTextSize.size.x / 2.f, spriteBounds.position.y + 250.f}));
+
+    this->wrongAnswerText.setFont(wrongFont);
+    this->wrongAnswerText.setCharacterSize(40);
+    this->wrongAnswerText.setFillColor(sf::Color(160, 0, 0, 255));
+    this->wrongAnswerText.setString("Wrong answer!\n Try again");
+    sf::FloatRect wrongTextSize = this->wrongAnswerText.getGlobalBounds();
+    this->wrongAnswerText.setPosition(sf::Vector2f({spriteBounds.position.x + spriteBounds.size.x / 2.f - wrongTextSize.size.x / 2.f, spriteBounds.position.y + 375.f}));
 }
 
 void Paper::render(sf::RenderTarget *target)
@@ -59,7 +70,17 @@ void Paper::render(sf::RenderTarget *target)
     target->draw(this->inputText);
 }
 
+void Paper::renderWrongText(sf::RenderTarget *target)
+{
+    target->draw(this->wrongAnswerText);
+}
+
 void Paper::setInputText(std::string myInputText)
 {
     this->inputText.setString(myInputText);
+}
+
+std::string Paper::getProblem()
+{
+    return this->questionBuffer;
 }

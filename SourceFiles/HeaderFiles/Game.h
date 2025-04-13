@@ -6,6 +6,8 @@
 #include <sstream>
 #include <random>
 #include <algorithm>
+#include <string>
+#include <cstring>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -87,6 +89,7 @@ private:
     std::unique_ptr<Paper> questionPaper;
     bool renderNow;
     std::string inputBuffer;
+    bool renderWrongAnswer;
 
     void initWindow();
     void initPlayer();
@@ -110,6 +113,7 @@ public:
     void pollEvents();
     void updateScoreWindow();
     void updateChest();
+    void updateScoreText();
 
     // Render
     void render();
@@ -134,6 +138,8 @@ public:
     bool stillInteracting();
     bool interactWithChest();
     void deleteChest(Chest *chest);
+    bool validateBuffer(std::string inputText);
+    std::string solveQuestion(std::string questionText);
 
     void run();
 

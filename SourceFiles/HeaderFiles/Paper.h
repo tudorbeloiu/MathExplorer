@@ -23,6 +23,9 @@ private:
     sf::Text inputText;
     std::string questionBuffer;
 
+    sf::Font wrongFont;
+    sf::Text wrongAnswerText;
+
     void initTexture();
     void initSprite(sf::RenderTarget *target);
     void initText();
@@ -31,7 +34,9 @@ public:
     Paper(std::string questionBuffer, sf::RenderTarget *target);
 
     void render(sf::RenderTarget *target);
+    void renderWrongText(sf::RenderTarget *target);
     void setInputText(std::string myInputText);
+    std::string getProblem();
 
     virtual ~Paper() = default;
 };

@@ -18,6 +18,7 @@ public:
     HardChest(const std::string &pathToTexture, int pointsGained, float spawnChance, int questionType);
 
     std::string genQuestion() override;
+    std::string solveQuestion(std::string question) override;
 
     std::unique_ptr<Chest> clone() const override;
 };

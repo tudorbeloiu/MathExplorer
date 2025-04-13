@@ -85,12 +85,12 @@ void Chest::update(sf::Clock chestAnimationTimer)
     }
 }
 
-int Chest::getPointsGained(int pointsGained) const
+int Chest::getPointsGained() const
 {
     return this->pointsGained;
 }
 
-int Chest::getQuestionType(int questionType) const
+int Chest::getQuestionType() const
 {
     return this->questionType;
 }
