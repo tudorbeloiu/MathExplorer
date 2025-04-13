@@ -239,6 +239,40 @@ void Game::pollEvents()
                 this->window->close();
                 break;
             }
+            if (this->renderNow == true)
+            {
+                if (keyCode->code == sf::Keyboard::Key::Backspace)
+                {
+                    if (this->inputBuffer.size() > 0)
+                    {
+                        this->inputBuffer.pop_back();
+                        this->questionPaper->setInputText(this->inputBuffer);
+                    }
+                }
+                if (keyCode->code == sf::Keyboard::Key::R)
+                {
+                    if (this->questionPaper)
+                    {
+                        this->questionPaper.reset();
+                        this->inputBuffer = "";
+                        this->renderNow = false;
+                        this->deleteChest(this->openChest);
+                    }
+                }
+            }
+        }
+        if (this->renderNow == true)
+        {
+            if (const auto *textEvent = this->myEvent->getIf<sf::Event::TextEntered>())
+            {
+                if (textEvent->unicode < 128 && textEvent->unicode != 8)
+                {
+                    char c = static_cast<char>(textEvent->unicode);
+                    this->inputBuffer += c;
+                    if (this->questionPaper)
+                        this->questionPaper->setInputText(this->inputBuffer);
+                }
+            }
         }
     }
 }
@@ -430,15 +464,6 @@ void Game::update()
         {
             this->initQuestionPaper(this->openChest->genQuestion());
             this->renderNow = true;
-            auto it = std::find(this->chestsArray.begin(), this->chestsArray.end(), this->openChest);
-            if (it != this->chestsArray.end())
-            {
-                this->overlayActive = false;
-                this->overlayChest = nullptr;
-                delete *it;
-                this->chestsArray.erase(it);
-            }
-            this->openChest = nullptr;
         }
     }
     if (this->remainingTimeToInt > 0)
@@ -449,6 +474,19 @@ void Game::update()
     {
         this->gameIsRunning = false;
     }
+}
+
+void Game::deleteChest(Chest *openChest)
+{
+    auto it = std::find(this->chestsArray.begin(), this->chestsArray.end(), this->openChest);
+    if (it != this->chestsArray.end())
+    {
+        this->overlayActive = false;
+        this->overlayChest = nullptr;
+        delete *it;
+        this->chestsArray.erase(it);
+    }
+    this->openChest = nullptr;
 }
 
 // Render functions

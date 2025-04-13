@@ -86,6 +86,7 @@ private:
     // Question spawn
     std::unique_ptr<Paper> questionPaper;
     bool renderNow;
+    std::string inputBuffer;
 
     void initWindow();
     void initPlayer();
@@ -131,8 +132,8 @@ public:
     sf::Vector2u avoidCollisionSpawn(Chest *chest, Player *player);
 
     bool stillInteracting();
-
     bool interactWithChest();
+    void deleteChest(Chest *chest);
 
     void run();
 

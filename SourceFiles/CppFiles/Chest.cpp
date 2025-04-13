@@ -66,7 +66,7 @@ void Chest::update(sf::Clock chestAnimationTimer)
         if (this->frameIndex == 5)
         {
             animationFinished = true;
-            this->frameIndex = 0;
+            this->frameIndex = 4;
         }
         if (this->questionType == 1)
         {

@@ -20,6 +20,7 @@ private:
 
     sf::Font font;
     sf::Text questionText;
+    sf::Text inputText;
     std::string questionBuffer;
 
     void initTexture();
@@ -30,6 +31,7 @@ public:
     Paper(std::string questionBuffer, sf::RenderTarget *target);
 
     void render(sf::RenderTarget *target);
+    void setInputText(std::string myInputText);
 
     virtual ~Paper() = default;
 };
