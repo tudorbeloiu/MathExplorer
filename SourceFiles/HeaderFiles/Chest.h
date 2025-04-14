@@ -3,6 +3,10 @@
 
 #include <iostream>
 #include <cmath>
+#include <random>
+#include <vector>
+#include <string>
+#include <cstring>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -44,6 +48,7 @@ public:
     void update(sf::Clock chestAnimationTimer);
     void render(sf::RenderTarget &target);
     void setPosition(sf::Vector2f newPos);
+    int generateRandomNumber(int min, int max);
 
     bool getAnimationFinished();
 

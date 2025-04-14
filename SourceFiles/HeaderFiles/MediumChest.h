@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <set>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>

@@ -85,11 +85,16 @@ private:
     sf::Clock chestAnimationTimer;
     Chest *openChest;
 
+    int chestIsAlreadyOpen;
+
     // Question spawn
     std::unique_ptr<Paper> questionPaper;
     bool renderNow;
     std::string inputBuffer;
     bool renderWrongAnswer;
+
+    bool disablePlayerMovement = false;
+    std::string question;
 
     void initWindow();
     void initPlayer();
@@ -139,7 +144,6 @@ public:
     bool interactWithChest();
     void deleteChest(Chest *chest);
     bool validateBuffer(std::string inputText);
-    std::string solveQuestion(std::string questionText);
 
     void run();
 

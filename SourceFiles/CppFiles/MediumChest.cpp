@@ -9,7 +9,58 @@ MediumChest::MediumChest(const std::string &pathToTexture, int pointsGained, flo
 
 std::string MediumChest::genQuestion()
 {
-    return "90-45-90";
+    std::string question = "";
+    int countNumbers = this->generateRandomNumber(2, 7);
+    int countOperators = countNumbers - 1;
+    int countParanthesis = this->generateRandomNumber(0, std::round(countNumbers / 2.f) - 1);
+
+    std::vector<bool> openPar(countNumbers, false);
+    std::vector<bool> closePar(countNumbers, false);
+
+    std::set<std::pair<int, int>> parPairs;
+    while (parPairs.size() < countParanthesis)
+    {
+        int start = this->generateRandomNumber(0, countNumbers - 2);
+        int end = this->generateRandomNumber(start + 1, countNumbers - 1);
+
+        bool overlay = false;
+        for (const auto &p : parPairs)
+        {
+            if (!(end < p.first || start > p.second))
+            {
+                overlay = true;
+                break;
+            }
+        }
+        if (overlay == false)
+        {
+            parPairs.insert(std::make_pair(start, end));
+            openPar[start] = true;
+            closePar[end] = true;
+        }
+    }
+    for (int i = 0; i < countNumbers; i++)
+    {
+        if (openPar[i])
+        {
+            question = question + "(";
+        }
+        int number = this->generateRandomNumber(1, 99);
+        question = question + std::to_string(number);
+        if (i < countOperators)
+        {
+            int indexOperator = this->generateRandomNumber(0, 1);
+            if (indexOperator == 0)
+                question = question + "+";
+            else
+                question = question + "-";
+        }
+        if (closePar[i])
+        {
+            question = question + ")";
+        }
+    }
+    return question;
 }
 std::string MediumChest::solveQuestion(std::string question)
 {

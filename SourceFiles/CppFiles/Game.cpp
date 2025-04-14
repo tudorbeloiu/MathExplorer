@@ -19,6 +19,9 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->overlayActive = false;
     this->renderNow = false;
     this->renderWrongAnswer = false;
+    this->chestIsAlreadyOpen = 0;
+    this->disablePlayerMovement = false;
+    this->question = "";
 }
 
 void Game::initWindow()
@@ -255,11 +258,14 @@ void Game::pollEvents()
                 {
                     if (this->questionPaper)
                     {
+                        this->chestIsAlreadyOpen = 0;
                         this->renderWrongAnswer = false;
                         this->questionPaper.reset();
                         this->inputBuffer = "";
                         this->renderNow = false;
                         this->deleteChest(this->openChest);
+                        this->disablePlayerMovement = false;
+                        this->question = "";
                     }
                 }
                 if (keyCode->code == sf::Keyboard::Key::Enter)
@@ -270,8 +276,11 @@ void Game::pollEvents()
                         {
                             if (this->validateBuffer(this->inputBuffer))
                             {
-                                std::string questionResult = this->openChest->solveQuestion(this->openChest->genQuestion());
+
+                                std::string questionResult = this->openChest->solveQuestion(question);
                                 std::string playerResult = this->inputBuffer;
+
+                                std::cout << question << "   " << questionResult << "   " << playerResult << '\n';
 
                                 if (strcmp(questionResult.c_str(), playerResult.c_str()) == 0)
                                 {
@@ -284,6 +293,9 @@ void Game::pollEvents()
                                     this->inputBuffer = "";
                                     this->renderNow = false;
                                     this->deleteChest(this->openChest);
+                                    this->chestIsAlreadyOpen = 0;
+                                    this->disablePlayerMovement = false;
+                                    this->question = "";
                                 }
                                 else
                                 {
@@ -489,7 +501,10 @@ void Game::updateScoreWindow()
 void Game::update()
 {
     this->pollEvents();
-    this->updatePlayer(this->window);
+    if (this->disablePlayerMovement == false)
+    {
+        this->updatePlayer(this->window);
+    }
     if (this->chestsArray.size() < this->maxNumberChests)
     {
         this->chestSpawner();
@@ -504,11 +519,16 @@ void Game::update()
     }
     if (this->interactWithChest())
     {
+        this->disablePlayerMovement = true;
         // if player interacts with a chest, we render the animation for that chest
         this->openChest->update(this->chestAnimationTimer);
         if (this->openChest->getAnimationFinished())
         {
-            this->initQuestionPaper(this->openChest->genQuestion());
+            if (this->chestIsAlreadyOpen <= 5)
+            {
+                this->question = this->openChest->genQuestion();
+                this->initQuestionPaper(this->question);
+            }
             this->renderNow = true;
         }
     }
@@ -769,6 +789,7 @@ bool Game::interactWithChest()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G))
             {
                 this->openChest = this->chestsArray[i];
+                this->chestIsAlreadyOpen++;
                 return true;
             }
         }

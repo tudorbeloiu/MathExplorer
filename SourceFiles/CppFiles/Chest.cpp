@@ -85,6 +85,20 @@ void Chest::update(sf::Clock chestAnimationTimer)
     }
 }
 
+int Chest::generateRandomNumber(int min, int max)
+{
+    // create a static random device, used only once to seed the generator
+    static std::random_device rd;
+
+    // initialize a "Mersenne Twister" random number generator with the random device seed
+    static std::mt19937 gen(rd());
+
+    // create an uniform int distribution between given parameters
+    // this ensures that every number in the range has an equal chance
+    std::uniform_int_distribution<> distrib(min, max);
+    return distrib(gen);
+}
+
 int Chest::getPointsGained() const
 {
     return this->pointsGained;
