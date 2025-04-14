@@ -818,7 +818,7 @@ bool Game::validateBuffer(std::string inputText)
     {
         if (isdigit(inputText[i]) == false)
         {
-            if (inputText[i] != '-' && inputText[i] != '+')
+            if (inputText[i] != '-' && inputText[i] != '+' && inputText[i] != ' ')
                 return false;
         }
     }

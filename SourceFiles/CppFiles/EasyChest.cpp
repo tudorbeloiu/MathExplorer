@@ -10,7 +10,7 @@ EasyChest::EasyChest(const std::string &pathToTexture, int pointsGained, float s
 std::string EasyChest::genQuestion()
 {
     std::string question = "";
-    int countNumbers = this->generateRandomNumber(2, 7);
+    int countNumbers = this->generateRandomNumber(2, 4);
     int countOperators = countNumbers - 1;
 
     for (int i = 0; i < countNumbers; i++)
