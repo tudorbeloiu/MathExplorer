@@ -174,7 +174,7 @@ std::string HardChest::genQuestion()
         }
 
         ok = solveQuestion(question);
-    } while (ok == "NULL" || ok == "impossible");
+    } while (ok == "NULL");
 
     return question;
 }

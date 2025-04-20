@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -10,6 +11,7 @@
 #include <SFML/Network.hpp>
 
 #include "Game.h"
+#include "Exceptions.h"
 
 class MainMenu
 {
@@ -21,6 +23,8 @@ private:
 
     sf::Texture backgroundTexture;
     sf::Sprite *backgroundSprite;
+
+    std::string aboutMessage;
 
     int mainMenuSelected;
 
@@ -46,6 +50,7 @@ public:
     {
         return this->mainMenuSelected;
     }
+    std::string wrapText(sf::Text& aboutText, std::string& input, float maxWidth);
 
     const sf::RenderWindow &getMenuWindow() const;
 

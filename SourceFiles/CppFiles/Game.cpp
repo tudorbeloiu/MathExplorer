@@ -274,34 +274,38 @@ void Game::pollEvents()
                     {
                         if (this->inputBuffer != "")
                         {
-                            if (this->validateBuffer(this->inputBuffer))
+                            std::string questionResult = this->openChest->solveQuestion(question);
+                            std::string playerResult = this->inputBuffer;
+
+                            std::cout << question << "   " << questionResult << "   " << playerResult << '\n';
+
+                            if (dynamic_cast<HardChest *>(this->openChest))
                             {
-
-                                std::string questionResult = this->openChest->solveQuestion(question);
-                                std::string playerResult = this->inputBuffer;
-
-                                std::cout << question << "   " << questionResult << "   " << playerResult << '\n';
-
-                                if (strcmp(questionResult.c_str(), playerResult.c_str()) == 0)
+                                for (char &c : playerResult)
                                 {
-                                    int numberOfPointsGained = this->openChest->getPointsGained();
-                                    this->playerScore += numberOfPointsGained;
-
-                                    this->renderWrongAnswer = false;
-
-                                    this->questionPaper.reset();
-                                    this->inputBuffer = "";
-                                    this->renderNow = false;
-                                    this->deleteChest(this->openChest);
-                                    this->chestIsAlreadyOpen = 0;
-                                    this->disablePlayerMovement = false;
-                                    this->question = "";
+                                    c = std::tolower(static_cast<unsigned char>(c));
                                 }
-                                else
-                                {
-                                    // Wrong answer display
-                                    this->renderWrongAnswer = true;
-                                }
+                            }
+
+                            if (strcmp(questionResult.c_str(), playerResult.c_str()) == 0)
+                            {
+                                int numberOfPointsGained = this->openChest->getPointsGained();
+                                this->playerScore += numberOfPointsGained;
+
+                                this->renderWrongAnswer = false;
+
+                                this->questionPaper.reset();
+                                this->inputBuffer = "";
+                                this->renderNow = false;
+                                this->deleteChest(this->openChest);
+                                this->chestIsAlreadyOpen = 0;
+                                this->disablePlayerMovement = false;
+                                this->question = "";
+                            }
+                            else
+                            {
+                                // Wrong answer display
+                                this->renderWrongAnswer = true;
                             }
                         }
                         else
@@ -812,18 +816,18 @@ int Game::generateRandomNumber(int min, int max)
     return distrib(gen);
 }
 
-bool Game::validateBuffer(std::string inputText)
-{
-    for (int i = 0; i < inputText.size(); i++)
-    {
-        if (isdigit(inputText[i]) == false)
-        {
-            if (inputText[i] != '-' && inputText[i] != '+' && inputText[i] != ' ')
-                return false;
-        }
-    }
-    return true;
-}
+// bool Game::validateBuffer(std::string inputText)
+// {
+//     for (int i = 0; i < inputText.size(); i++)
+//     {
+//         if (isdigit(inputText[i]) == false)
+//         {
+//             if (inputText[i] != '-' && inputText[i] != '+' && inputText[i] != ' ')
+//                 return false;
+//         }
+//     }
+//     return true;
+// }
 
 Game::~Game()
 {
