@@ -58,4 +58,31 @@ You have **60 seconds** to open as many chests as you can. Each chest poses a di
 
 ---
 
+## 🎮 Game Preview
+
+Here are some short GIFs showing different parts of the game:
+
+### Main Menu
+![MainMenu](./media/gifMenu.gif)
+
+### About Page
+![AboutMenu](./media/gifAbout.gif)
+
+### Chest Collision
+![ChestCollision](./media/gifCollision.gif)
+
+### Hard Chest
+![Hard Chest](./media/gifHardChest.gif)
+
+### Correct Answer
+![CorrectAnswer](./media/gifRightAnswer.gif)
+
+### Wrong Answer
+![WrongAnswer](./media/gifWrongAnswer.gif)
+
+### End Game Screen
+![EndGame](./media/gifEndGame.gif)
+
+---
+
 ❖ **Good luck** and may your mind be your greatest treasure! ❖  
