@@ -63,25 +63,25 @@ You have **60 seconds** to open as many chests as you can. Each chest poses a di
 Here are some short GIFs showing different parts of the game:
 
 ### Main Menu
-![MainMenu](./media/gifMenu.gif)
+![MainMenu](./Media/gifMenu.gif)
 
 ### About Page
-![AboutMenu](./media/gifAbout.gif)
+![AboutMenu](./Media/gifAbout.gif)
 
 ### Chest Collision
-![ChestCollision](./media/gifCollision.gif)
+![ChestCollision](./Media/gifCollision.gif)
 
 ### Hard Chest
-![Hard Chest](./media/gifHardChest.gif)
+![Hard Chest](./Media/gifHardChest.gif)
 
 ### Correct Answer
-![CorrectAnswer](./media/gifRightAnswer.gif)
+![CorrectAnswer](./Media/gifRightAnswer.gif)
 
 ### Wrong Answer
-![WrongAnswer](./media/gifWrongAnswer.gif)
+![WrongAnswer](./Media/gifWrongAnswer.gif)
 
 ### End Game Screen
-![EndGame](./media/gifEndGame.gif)
+![EndGame](./Media/gifEndGame.gif)
 
 ---
 
