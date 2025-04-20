@@ -28,6 +28,21 @@ void Player::initSprite()
     this->player->setScale({2.5f, 2.5f});
 }
 
+void Player::updateAnimationsForMainMenu()
+{
+    if (this->animationTimer.getElapsedTime().asSeconds() >= this->animationSpeed)
+    {
+        this->frameIndex++;
+        if (this->frameIndex >= 4)
+        {
+            this->frameIndex = 0;
+        }
+        this->currentFrame = sf::IntRect({this->frameIndex * 40, 3 * 48}, {40, 48});
+        this->player->setTextureRect(this->currentFrame);
+        this->animationTimer.restart();
+    }
+}
+
 void Player::updateAnimations()
 {
     if (this->animationTimer.getElapsedTime().asSeconds() >= this->animationSpeed)

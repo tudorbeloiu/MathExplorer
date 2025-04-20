@@ -55,6 +55,7 @@ public:
     sf::Vector2f getVelocity();
     void setVelocity(sf::Vector2f velocity);
     void setPosition(sf::Vector2f setPos);
+    void updateAnimationsForMainMenu();
 
     virtual ~Player();
 };

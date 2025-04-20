@@ -73,14 +73,22 @@ void Game::initScoreTextAndFontForScoreWindow()
     }
 
     this->scoreText.setFont(this->scoreFont);
-    this->scoreText.setCharacterSize(80);
+    this->scoreText.setCharacterSize(76);
     this->scoreText.setFillColor(sf::Color::White);
     this->scoreText.setOutlineColor(sf::Color(128, 0, 0, 255));
     this->scoreText.setOutlineThickness(3.5f);
 
     std::stringstream ss;
-    ss << "Congratulations!\n"
-       << "Your score: " << this->playerScore;
+    if (this->playerScore <= 20)
+    {
+        ss << "You can do better!\n"
+           << "Your score: " << this->playerScore;
+    }
+    else
+    {
+        ss << "Congratulations!\n"
+           << "Your score: " << this->playerScore;
+    }
 
     this->scoreText.setString(ss.str());
 
@@ -277,7 +285,7 @@ void Game::pollEvents()
                             std::string questionResult = this->openChest->solveQuestion(question);
                             std::string playerResult = this->inputBuffer;
 
-                            std::cout << question << "   " << questionResult << "   " << playerResult << '\n';
+                            // std::cout << question << "   " << questionResult << "   " << playerResult << '\n';
 
                             if (dynamic_cast<HardChest *>(this->openChest))
                             {

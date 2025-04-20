@@ -6,6 +6,7 @@ MainMenu::MainMenu(float width, float height)
     this->initBackgroundTexture();
     this->initFont();
     this->initText();
+    this->initPlayer();
     this->aboutMessage =
         "Put your math skills to the test in this fast-paced\nchallenge!\n"
         "You have 60 seconds to open as many chests\nas you can, each one asking a different math\nquestion.\n"
@@ -23,6 +24,13 @@ void MainMenu::initMainMenuVideo()
     this->MENU = new sf::RenderWindow(sf::VideoMode({800, 600}), "Main menu", sf::Style::Close | sf::Style::Titlebar);
     this->MENU->setFramerateLimit(60);
     this->MENU->setVerticalSyncEnabled(false);
+}
+void MainMenu::initPlayer()
+{
+    this->player = new Player();
+    sf::Vector2u mmBounds = this->MENU->getSize();
+    sf::Vector2f newPlayerPos = {20.f, 470.f};
+    this->player->setPosition(newPlayerPos);
 }
 
 void MainMenu::initBackgroundTexture()
@@ -220,6 +228,7 @@ void MainMenu::pollEvents()
 void MainMenu::update()
 {
     this->pollEvents();
+    this->player->updateAnimationsForMainMenu();
 }
 
 void MainMenu::renderBackground()
@@ -233,6 +242,7 @@ void MainMenu::render()
 
     this->renderBackground();
     this->draw(*MENU);
+    this->MENU->draw(this->player->getSprite());
 
     this->MENU->display();
 }
@@ -245,5 +255,6 @@ const sf::RenderWindow &MainMenu::getMenuWindow() const
 MainMenu::~MainMenu()
 {
     delete this->backgroundSprite;
+    delete this->player;
     delete this->MENU;
 }

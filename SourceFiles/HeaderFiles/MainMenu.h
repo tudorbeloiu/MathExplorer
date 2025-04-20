@@ -25,6 +25,7 @@ private:
     sf::Sprite *backgroundSprite;
 
     std::string aboutMessage;
+    Player *player;
 
     int mainMenuSelected;
 
@@ -32,6 +33,7 @@ private:
     void initText();
     void initMainMenuVideo();
     void initBackgroundTexture();
+    void initPlayer();
 
 public:
     MainMenu(float width, float height);
@@ -50,7 +52,7 @@ public:
     {
         return this->mainMenuSelected;
     }
-    std::string wrapText(sf::Text& aboutText, std::string& input, float maxWidth);
+    std::string wrapText(sf::Text &aboutText, std::string &input, float maxWidth);
 
     const sf::RenderWindow &getMenuWindow() const;
 
