@@ -1,0 +1,18 @@
+# Instructions to run the game
+
+Open your terminal and navigate to the `SourceFiles` directory:
+`cd SourceFiles`
+
+## If you have make installed
+-> Run the following command to compile and execute the project:
+`make run`
+
+## If you don't have make installed
+-> Compile the source files individually: 
+`g++ -c main.cpp "CppFiles/*.cpp" -I "../SFML/include" `
+
+-> Link the object files to create the executable: 
+`g++ main.o Game.o MainMenu.o Player.o Chest.o EasyChest.o MediumChest.o HardChest.o Paper.o -o main -L "../SFML/lib" -lsfml-graphics -lsfml-window -lsfml-system`
+
+-> Run the application:
+`./main`
