@@ -72,9 +72,7 @@ std::string MediumChest::solveQuestion(std::string question)
     return std::to_string(total);
 }
 
-std::unique_ptr<Chest> MediumChest::clone() const
+Chest *MediumChest::clone() const
 {
-    auto cloned = std::make_unique<MediumChest>(*this);
-    cloned->chestSprite = std::make_unique<sf::Sprite>(*this->chestSprite);
-    return cloned;
+    return new MediumChest(*this);
 }

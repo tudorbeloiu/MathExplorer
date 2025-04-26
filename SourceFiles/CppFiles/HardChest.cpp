@@ -179,9 +179,7 @@ std::string HardChest::genQuestion()
     return question;
 }
 
-std::unique_ptr<Chest> HardChest::clone() const
+Chest *HardChest::clone() const
 {
-    auto cloned = std::make_unique<HardChest>(*this);
-    cloned->chestSprite = std::make_unique<sf::Sprite>(*this->chestSprite);
-    return cloned;
+    return new HardChest(*this);
 }

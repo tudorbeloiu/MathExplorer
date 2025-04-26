@@ -1,10 +1,10 @@
 #include "../HeaderFiles/Game.h"
 
+int Game::remainingTimeToInt = 60;
+
 Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(timerFont)
 {
-    this->remainingTimeToInt = 60;
     this->playerScore = 0;
-    this->spawnerTime = 3.0f;
     this->initWindow();
     this->initWorld();
     this->initPlayer();
@@ -14,7 +14,6 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->initTimerFont();
     this->initTimerText();
     this->initScoreText();
-    this->maxNumberChests = 5;
     this->overlayChest = nullptr;
     this->overlayActive = false;
     this->renderNow = false;
@@ -697,8 +696,8 @@ sf::Vector2u Game::avoidCollisionSpawn(Chest *chest, Player *player)
     sf::Vector2u newPosition;
     do
     {
-        pozY = this->generateRandomNumber(230, 550);
-        pozX = this->generateRandomNumber(2, 1280 - 125);
+        pozY = Game::generateRandomNumber(230, 550);
+        pozX = Game::generateRandomNumber(2, 1280 - 125);
 
         chest->setPosition(static_cast<sf::Vector2f>(sf::Vector2u({pozX, pozY})));
         ok = true;
@@ -774,7 +773,7 @@ int Game::generateChestType()
     // medium chest = spawn chance 30%
     // hard chest = spawn chance 20%
 
-    int myNumber = this->generateRandomNumber(0, 100);
+    int myNumber = Game::generateRandomNumber(0, 100);
 
     if (myNumber <= 50)
     {

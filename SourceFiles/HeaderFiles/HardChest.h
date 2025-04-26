@@ -20,7 +20,7 @@ public:
     std::string genQuestion() override;
     std::string solveQuestion(std::string question) override;
 
-    std::unique_ptr<Chest> clone() const override;
+    Chest* clone() const override;
 };
 
 #endif

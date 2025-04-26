@@ -90,9 +90,7 @@ std::string EasyChest::solveQuestion(std::string question)
     return std::to_string(total);
 }
 
-std::unique_ptr<Chest> EasyChest::clone() const
+Chest *EasyChest::clone() const
 {
-    auto cloned = std::make_unique<EasyChest>(*this);
-    cloned->chestSprite = std::make_unique<sf::Sprite>(*this->chestSprite);
-    return cloned;
+    return new EasyChest(*this);
 }

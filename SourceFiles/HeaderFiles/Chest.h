@@ -35,9 +35,7 @@ public:
     virtual std::string genQuestion() = 0;
     virtual std::string solveQuestion(std::string question) = 0;
 
-    virtual std::unique_ptr<Chest> clone() const = 0;
-    // Returns a smart pointer which cointains a Chest object(or derived)
-    // Clone a polymorphic object(copy an object w/o knowing exactly his real type)
+    virtual Chest *clone() const = 0;
 
     Chest(const Chest &other);
     Chest &operator=(const Chest &other);

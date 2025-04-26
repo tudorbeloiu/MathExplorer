@@ -49,7 +49,7 @@ private:
     sf::Text timerText;
     sf::Font timerFont;
     sf::Clock gameTimer;
-    int remainingTimeToInt;
+    static int remainingTimeToInt;
     float timerSpeed = 1.f;
     bool gameIsRunning = true;
     std::stringstream ssTime;
@@ -75,8 +75,8 @@ private:
     Chest *chest;
     std::vector<Chest *> chestsArray;
     sf::Clock chestsTimer;
-    int spawnerTime;
-    int maxNumberChests;
+    const int spawnerTime = 3.0f;
+    const int maxNumberChests = 5;
 
     Chest *overlayChest;
     bool renderChestOverlay = false;
@@ -135,7 +135,7 @@ public:
     bool getGameIsRunning();
 
     void displayScoreOnWindow();
-    int generateRandomNumber(int min, int max);
+    static int generateRandomNumber(int min, int max);
     int generateChestType();
     void chestSpawner();
     sf::Vector2u avoidCollisionSpawn(Chest *chest, Player *player);
