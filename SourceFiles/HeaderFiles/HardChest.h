@@ -11,6 +11,7 @@
 #include <SFML/System.hpp>
 
 #include "Chest.h"
+#include "MainMenu.h"
 
 class HardChest : public Chest
 {
@@ -20,7 +21,7 @@ public:
     std::string genQuestion() override;
     std::string solveQuestion(std::string question) override;
 
-    Chest* clone() const override;
+    Chest *clone() const override;
 };
 
 #endif

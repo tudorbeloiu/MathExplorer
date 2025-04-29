@@ -1,0 +1,24 @@
+Resurse proiect POO:
+
+Resurse teoretice:
+-> https://www.youtube.com/playlist?list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up (P.S. foarte utile toate videoclipurile)
+-> https://www.sfml-dev.org./documentation/3.0.0/
+-> https://www.youtube.com/watch?v=bOG8667yePY&ab_channel=Geekprojects (pentru meniul principal)
+-> https://www.youtube.com/watch?v=BLtnd54AMvw&t=1440s&ab_channel=ChiliTomatoNoodle (pentru animatiile personajului, nu e chiar asa de util ca videoclipurile de mai sus)
+-> putina inteligenta artificiala(dar si cu scopul de a invata)
+
+Resurse grafice:
+-> personaj: https://ventilatore.itch.io/the-fantasy-tileset-animated-character
+
+-> cufere: https://karsiori.itch.io/pixel-art-chest-pack-animated
+
+-> background : https://craftpix.net/freebies/free-elven-land-game-battle-backgrounds/
+
+-> https://app.layer.ai/ (am generat cu AI textura paginilor pe care sunt afisate intrebarile de matematica)
+
+
+Font:
+-> https://www.1001fonts.com/karma-font.html
+-> https://fonts.google.com/specimen/Pixelify+Sans?preview.text=54&categoryFilters=Sans+Serif:%2FSans%2FSuperellipse
+-> https://free-game-assets.itch.io/free-tiny-hero-sprites-pixel-art (doar font-ul din fisierele descarcate)
+

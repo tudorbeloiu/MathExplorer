@@ -1,13 +1,29 @@
 #include "../HeaderFiles/MainMenu.h"
 
-MainMenu::MainMenu(float width, float height)
+bool MainMenu::chooseImpossibleType = false;
+
+MainMenu::MainMenu(float width, float height) : optionEng(font), optionRom(font)
 {
     this->initMainMenuVideo();
     this->initBackgroundTexture();
     this->initFont();
     this->initText();
     this->initPlayer();
-    this->aboutMessage =
+    this->chooseImpossibleType = false;
+    this->pressed = false;
+    this->drawOnlyAbout = false;
+    this->optionLanguage = 0;
+    this->aboutMessageRomanian = "Pune-ti abilitatile de matematica la incercare in\naceasta provocare rapida!\n"
+                                 "Aveti 60 de secunde pentru a deschide cat mai multe\ncufere, fiecare afisand o alta intrebare de matematica.\n"
+                                 "Cuferele vin in trei niveluri de dificultate:\n"
+                                 " Easy Chest: adunari si scaderi simple\n"
+                                 " Cufar mediu: inmultiri si diviziuni cu numere intregi\n"
+                                 " Hard Chest: ecuatii de gradul doi. Daca\n discriminantul (D) este negativ, tastati \"imposibil\"\n(indiferent de majuscule).\n"
+                                 "Daca D e mai mare decat 0, ambele solutii x1 si x2\nvor fi intotdeauna numere intregi, introduceti-le ca\nx1,x2 cu x1 mai mic decat x2.\n"
+                                 "Pentru a deschide un cufar, apasati G.\n Daca nu cunoasteti raspunsul, trebuie doar\nsa apasati R pentru a merge mai departe;\ncronometrul continua sa ruleze!\n"
+                                 "Strangeti cat mai multe puncte si concurati\ncu prietenii in timp ce va ascuti mintea.\n";
+
+    this->aboutMessageEnglish =
         "Put your math skills to the test in this fast-paced\nchallenge!\n"
         "You have 60 seconds to open as many chests\nas you can, each one asking a different math\nquestion.\n"
         "Chests come in three difficulty levels:\n"
@@ -161,6 +177,9 @@ void MainMenu::pollEvents()
                     {
                         sf::RenderWindow *ABOUT = new sf::RenderWindow(sf::VideoMode({800, 600}), "About", sf::Style::Close | sf::Style::Titlebar);
 
+                        this->chooseOption.push_back(optionEng);
+                        this->chooseOption.push_back(optionRom);
+
                         sf::Texture aboutBackgroundTexture;
                         sf::Sprite *aboutBackground;
 
@@ -181,12 +200,23 @@ void MainMenu::pollEvents()
                         }
                         else
                         {
+                            this->chooseOption[0].setFont(font);
+                            this->chooseOption[0].setCharacterSize(40);
+                            this->chooseOption[0].setFillColor(sf::Color(128, 0, 0, 255));
+                            this->chooseOption[0].setPosition(sf::Vector2f({220.f, 250.f}));
+                            this->chooseOption[0].setString("ENGLISH");
+
+                            this->chooseOption[1].setFont(font);
+                            this->chooseOption[1].setCharacterSize(40);
+                            this->chooseOption[1].setFillColor(sf::Color::White);
+                            this->chooseOption[1].setPosition(sf::Vector2f({440.f, 250.f}));
+                            this->chooseOption[1].setString("ROMANA");
+
                             aboutText.setFont(aboutFont);
                             aboutText.setCharacterSize(27);
                             aboutText.setOutlineColor(sf::Color(128, 0, 0));
                             aboutText.setOutlineThickness(2.f);
                             aboutText.setPosition(sf::Vector2f({40.f, 10.f}));
-                            aboutText.setString(this->aboutMessage);
                         }
 
                         while (ABOUT->isOpen())
@@ -197,21 +227,70 @@ void MainMenu::pollEvents()
                             {
                                 if (aboutEvent->is<sf::Event::Closed>())
                                 {
+                                    this->pressed = false;
+                                    this->drawOnlyAbout = false;
+                                    this->optionLanguage = 0;
                                     ABOUT->close();
                                 }
                                 if (const auto &keyCodeAbout = aboutEvent->getIf<sf::Event::KeyPressed>())
                                 {
                                     if (keyCodeAbout->code == sf::Keyboard::Key::Escape)
                                     {
+                                        this->pressed = false;
+                                        this->drawOnlyAbout = false;
+                                        this->optionLanguage = 0;
                                         ABOUT->close();
+                                    }
+                                    if (keyCodeAbout->code == sf::Keyboard::Key::Right || keyCodeAbout->code == sf::Keyboard::Key::Left)
+                                    {
+                                        if (this->optionLanguage == 0)
+                                        {
+                                            this->optionLanguage = 1;
+                                            this->chooseOption[0].setFillColor(sf::Color::White);
+
+                                            this->chooseOption[1].setFillColor(sf::Color(128, 0, 0, 255));
+                                        }
+                                        else if (this->optionLanguage == 1)
+                                        {
+                                            this->optionLanguage = 0;
+                                            this->chooseOption[1].setFillColor(sf::Color::White);
+
+                                            this->chooseOption[0].setFillColor(sf::Color(128, 0, 0, 255));
+                                        }
+                                    }
+                                    if (keyCodeAbout->code == sf::Keyboard::Key::Enter && this->pressed == false)
+                                    {
+                                        this->drawOnlyAbout = true;
+                                        this->pressed = true;
                                     }
                                 }
                             }
                             ABOUT->clear();
                             ABOUT->draw(*aboutBackground);
-                            ABOUT->draw(aboutText);
+                            if (this->drawOnlyAbout == false)
+                            {
+                                for (auto &textOption : chooseOption)
+                                {
+                                    ABOUT->draw(textOption);
+                                }
+                            }
+                            else
+                            {
+                                if (this->optionLanguage == 0)
+                                {
+                                    aboutText.setString(this->aboutMessageEnglish);
+                                    this->chooseImpossibleType = false;
+                                }
+                                else
+                                {
+                                    aboutText.setString(this->aboutMessageRomanian);
+                                    this->chooseImpossibleType = true;
+                                }
+                                ABOUT->draw(aboutText);
+                            }
                             ABOUT->display();
                         }
+
                         delete aboutBackground;
                     }
                     if (choice == 2)
@@ -224,7 +303,10 @@ void MainMenu::pollEvents()
         }
     }
 }
-
+bool MainMenu::getChooseImpossibleType()
+{
+    return chooseImpossibleType;
+}
 void MainMenu::update()
 {
     this->pollEvents();

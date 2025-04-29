@@ -23,8 +23,19 @@ private:
 
     sf::Texture backgroundTexture;
     sf::Sprite *backgroundSprite;
+    static bool chooseImpossibleType;
 
-    std::string aboutMessage;
+    sf::Text optionRom;
+    sf::Text optionEng;
+
+    std::vector<sf::Text> chooseOption;
+    int optionLanguage = 0;
+
+    bool drawOnlyAbout = false;
+    bool pressed = false;
+
+    std::string aboutMessageRomanian;
+    std::string aboutMessageEnglish;
     Player *player;
 
     int mainMenuSelected;
@@ -53,6 +64,8 @@ public:
         return this->mainMenuSelected;
     }
     std::string wrapText(sf::Text &aboutText, std::string &input, float maxWidth);
+
+    static bool getChooseImpossibleType();
 
     const sf::RenderWindow &getMenuWindow() const;
 

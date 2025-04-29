@@ -21,6 +21,7 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->chestIsAlreadyOpen = 0;
     this->disablePlayerMovement = false;
     this->question = "";
+    Game::remainingTimeToInt = 60;
 }
 
 void Game::initWindow()

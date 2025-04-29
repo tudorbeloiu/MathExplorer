@@ -1,0 +1,113 @@
+->Codul din clase este separat in fisiere header (.h sau hpp) si surse (.cpp)
+->Fara using namespace std;
+
+
+Mosteniri:
+= Clasa de baza "Chest" si 3 clase derivate din ea ; "EasyChest", "MediumChest", "HardChest"
+= Clasa principala este "Game" care contine intreg continutul jocului. La rularea programului,
+se deschide fereastra "MainMenu" si de acolo avem o lista de optiuni:
+	1. Lansarea jocului propriu-zis, "Game"
+	2. Afisarea ferestrei "About" care contine o scurta descriere a jocului
+	3. "Exit", inchiderea programului
+= Clasa "Player" contine toate functionalitatile caracterului principal
+= Clasa "Paper" contine functionalitatile sprite-ului care se randeaza pe ecranul jocului si afiseaza
+cate o intrebare de matematica in functie de dificultatea chest-ului(EasyChest,MediumChest,HardChest)
+= Clasa "Exceptions" contine exceptii(descriere mai detaliata putin mai tarziu, la categoria exceptii)
+
+
+Functii virtuale:
+= Functia de generare a intrebarilor,respectiv cea de rezolvare a intrebarilor sunt pur virtuale si sunt implementate diferit in fiecare clasa derivata(EasyChest,MediumChest,HardChest)
+	=> In EasyChest avem adunari si scaderi cu numere de la 1-99 si numarul de termeni din ecuatie de la 2 pana la 4 inclusiv
+	=> In MediumChest avem inmultiri sau adunari formate din 2 termeni cuprinsi intre 19 si 2501
+	=> In HardChest avem ecuatii de grad 2 cu numere intregi; functia genereaza ecuatii cu solutii intregi sau ecuatii care au delta negativa, caz in care trebuie sa scriem "impossible"(case-insensitive)
+= Destructor virtual in clasa Chest
+= Functia de clone() virtuala in clasa Chest si este suprascrisa in clasele derivate(pentru a realiza copierea chest-urilor)
+-> Functiile virtuale sunt apelate prin pointeri la clasa de baza, pointerii la clasa de baza sunt atribute ale clasei "Game", nu doar niste pointeri/referinte in main
+
+
+Constructori virtuali(clone)
+
+
+Apelarea constructorului de din clasa de baza "Chest" din constructori din derivate (EasyChest,MediumChest,HardChest)
+
+
+Clasa cu atribut de tip pointer la o clasa de baza (clasa "Game" contine atributul "Chest", chiar un vector de Chest-uri) ; fiecare functie virtuala este apelata prin pointer la clasade baza
+= suprascriere constructor de copiere
+
+
+Dynamic cast
+(secventa din cod) din "Game.cpp": 
+" if (dynamic_cast<HardChest *>(this->openChest))
+  {
+	for (char &c : playerResult)
+	{
+		c = std::tolower(static_cast<unsigned char>(c));
+        }
+  }"
+
+
+Static cast(multe aparitii in codul din "Game.cpp"):
+"chest->setPosition(static_cast<sf::Vector2f>(sf::Vector2u({pozX, pozY})));"
+" chest->setPosition(static_cast<sf::Vector2f>(chestCoords));"
+" float scaleX = static_cast<float>(windowSize.x) / textureSize.x;
+        float scaleY = static_cast<float>(windowSize.y) / textureSize.y;"
+etc.
+
+
+Smart pointers
+= In mare parte, nu am folosit smart pointers(intrucat scrie ca e doar recomandat, nu necesar). Mi se pare mai interesant sa fiu eu cel responsabil de utilizarea memoriei,
+dar am punctat si aceasta cerinta:
+-> in "Game.h", am declarat pagina pe care este afisata intrebarea de matematica astfel : "std::unique_ptr<Paper> questionPaper;"
+->initializarea lui "questionPaper" are loc in "Game.cpp" : " void Game::initQuestionPaper(std::string questionText)
+{
+    std::string questionBuffer = questionText;
+    try
+    {
+        questionPaper = std::make_unique<Paper>(questionText, this->window);
+    }
+    catch (const LoadTextureException &e)
+    {
+        std::cerr << "Error: " << e.what() << '\n';
+    }
+    catch (const LoadFontException &e)
+    {
+        std::cerr << "Error: " << e.what() << '\n';
+    }
+}" contine si o serie de exceptii pe care le voi explica mai in detaliu la cerinta urmatoare
+
+
+
+Exceptii ("Exceptions.h")
+= ierarhie derivata din clasa std::exception (clasa parinte se numeste "PrimaryExceptions")
+= 3 clase pentru erori specifice. Clasele trateaza categorii de erori distincte:
+	-> Eroare la incarcarea texturii : "class LoadTextureException : public PrimaryExceptions..."
+	-> Eroare la incarcarea fontului : "class LoadFontException : public PrimaryExceptions..."
+	-> Eroare la generarea intrebarilor: "class GenerateQuestionException : public PrimaryExceptions..."
+= utilizare cu sens:
+	->la initializarea lui "questionPaper" (codul de mai sus)
+	-> la initializarea unui font, unei texturi:
+	"if (!this->scoreFont.openFromFile("Fonts/planes.ttf"))
+    	{
+        	throw LoadFontException("Failed to load font from Fonts/planes.ttf");
+    	}"
+
+
+	"if (!this->backgroundTexture.loadFromFile("Textures/background.png"))
+    	{
+        	throw LoadTextureException("Error loading texture from Textures/background.png");
+    	}"
+
+Functii si atribute statice:
+= "static std::random_device rd;"
+= "static int remainingTimeToInt;"
+= "static int generateRandomNumber(int min, int max);"
+
+STL
+= vector
+
+Const
+= " const int spawnerTime = 3.0f;
+    const int maxNumberChests = 5;"
+= "const sf::RenderWindow &getWindow() const;"
+etc
+

@@ -1,4 +1,5 @@
 #include "../HeaderFiles/HardChest.h"
+#include "../HeaderFiles/MainMenu.h"
 
 HardChest::HardChest(const std::string &pathToTexture, int pointsGained, float spawnChance, int questionType)
     : Chest(pathToTexture, pointsGained, spawnChance, questionType)
@@ -76,7 +77,17 @@ std::string HardChest::solveQuestion(std::string question)
 
     int delta = b * b - (4 * a * c);
     if (delta < 0)
-        return "impossible";
+    {
+        if (MainMenu::getChooseImpossibleType())
+        {
+            return "imposibil";
+        }
+        else
+        {
+            return "impossible";
+        }
+    }
+
     else if (delta == 0)
     {
         if (b % (2 * a) == 0)
