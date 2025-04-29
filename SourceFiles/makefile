@@ -22,7 +22,7 @@ main: $(OBJS)
 
 #target that runs the exe
 run: main
-	./main
+	.\main.exe
 
 clean:
 	rm -f $(OBJS) main

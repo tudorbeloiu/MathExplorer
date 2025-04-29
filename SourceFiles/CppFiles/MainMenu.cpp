@@ -13,26 +13,26 @@ MainMenu::MainMenu(float width, float height) : optionEng(font), optionRom(font)
     this->pressed = false;
     this->drawOnlyAbout = false;
     this->optionLanguage = 0;
-    this->aboutMessageRomanian = "Pune-ti abilitatile de matematica la incercare in\naceasta provocare rapida!\n"
-                                 "Aveti 60 de secunde pentru a deschide cat mai multe\ncufere, fiecare afisand o alta intrebare de matematica.\n"
-                                 "Cuferele vin in trei niveluri de dificultate:\n"
-                                 " Easy Chest: adunari si scaderi simple\n"
-                                 " Cufar mediu: inmultiri si diviziuni cu numere intregi\n"
-                                 " Hard Chest: ecuatii de gradul doi. Daca\n discriminantul (D) este negativ, tastati \"imposibil\"\n(indiferent de majuscule).\n"
-                                 "Daca D e mai mare decat 0, ambele solutii x1 si x2\nvor fi intotdeauna numere intregi, introduceti-le ca\nx1,x2 cu x1 mai mic decat x2.\n"
-                                 "Pentru a deschide un cufar, apasati G.\n Daca nu cunoasteti raspunsul, trebuie doar\nsa apasati R pentru a merge mai departe;\ncronometrul continua sa ruleze!\n"
-                                 "Strangeti cat mai multe puncte si concurati\ncu prietenii in timp ce va ascuti mintea.\n";
+    this->aboutMessageRomanian = "- Pune-ti abilitatile de matematica la incercare in aceasta provocare rapida!\n"
+                                 "- Aveti 60 de secunde pentru a deschide cat mai multe cufere,\nfiecare afisand o alta intrebare de matematica."
+                                 "- Cuferele vin in trei niveluri de dificultate:\n"
+                                 "  =| Easy Chest: adunari si scaderi simple\n"
+                                 "  =| Cufar mediu: inmultiri si diviziuni cu numere intregi\n"
+                                 "  =| Hard Chest: ecuatii de gradul doi. Daca discriminantul (D) este negativ, tastati \"imposibil\"\n(indiferent de majuscule).\n"
+                                 "- Daca D e mai mare decat 0, ambele solutii x1 si x2 vor fi intotdeauna numere intregi,\nintroduceti-le ca x1,x2 cu x1 mai mic decat x2.\n"
+                                 "- Pentru a deschide un cufar, apasati G. Daca nu cunoasteti raspunsul, trebuie doar\nsa apasati R pentru a merge mai departe;\ncronometrul continua sa ruleze!\n"
+                                 "- Strangeti cat mai multe puncte si concurati cu prietenii in timp ce va antrenati mintea.\n";
 
     this->aboutMessageEnglish =
-        "Put your math skills to the test in this fast-paced\nchallenge!\n"
-        "You have 60 seconds to open as many chests\nas you can, each one asking a different math\nquestion.\n"
-        "Chests come in three difficulty levels:\n"
-        "  Easy Chest: simple additions and subtractions\n"
-        "  Medium Chest: whole-number multiplications and\ndivisions\n"
-        "  Hard Chest: quadratic equations.If the\ndiscriminant (D) is negative, type \"impossible\"\n(case-insensitive).\n"
-        "  If D g.e than 0, both solutions x1 and x2 will always be\nint numbers, enter them as x1,x2\nwith x1 less than x2.\n"
-        "To open a chest, press G. If you don t know the\nanswer, just press R to skip it and move on;\nthe timer keeps running!\n"
-        "Rack up as many points as possible and compete\nwith friends while sharpening your mind.\n                  Good luck!";
+        "- Put your math skills to the test in this fast-paced challenge!\n"
+        "- You have 60 seconds to open as many chests as you can,\neach one asking a different math question.\n"
+        "- Chests come in three difficulty levels:\n"
+        "  =| Easy Chest: simple additions and subtractions\n"
+        "  =| Medium Chest: whole-number multiplications and divisions\n"
+        "  =| Hard Chest: quadratic equations.If the discriminant (D) is negative, type \"impossible\"\n(case-insensitive).\n"
+        "- If D g.e than 0, both solutions x1 and x2 will always be int numbers,\nenter them as x1,x2 with x1 less than x2.\n"
+        "- To open a chest, press G. If you don t know the answer, just press R to skip it\nand move on; the timer keeps running!\n"
+        "- Rack up as many points as possible and compete with friends while sharpening your mind.\n                  Good luck!";
 }
 
 void MainMenu::initMainMenuVideo()
@@ -175,7 +175,7 @@ void MainMenu::pollEvents()
                     }
                     if (choice == 1)
                     {
-                        sf::RenderWindow *ABOUT = new sf::RenderWindow(sf::VideoMode({800, 600}), "About", sf::Style::Close | sf::Style::Titlebar);
+                        sf::RenderWindow *ABOUT = new sf::RenderWindow(sf::VideoMode({1366, 768}), "About", sf::Style::Close | sf::Style::Titlebar);
 
                         this->chooseOption.push_back(optionEng);
                         this->chooseOption.push_back(optionRom);
@@ -200,23 +200,28 @@ void MainMenu::pollEvents()
                         }
                         else
                         {
+
+                            sf::Vector2u aboutSize = ABOUT->getSize();
+                            sf::FloatRect textBounds = this->chooseOption[0].getGlobalBounds();
+
                             this->chooseOption[0].setFont(font);
                             this->chooseOption[0].setCharacterSize(40);
                             this->chooseOption[0].setFillColor(sf::Color(128, 0, 0, 255));
-                            this->chooseOption[0].setPosition(sf::Vector2f({220.f, 250.f}));
+                            this->chooseOption[0].setPosition(sf::Vector2f({aboutSize.x / 2.f - 180.f, aboutSize.y / 2.f}));
                             this->chooseOption[0].setString("ENGLISH");
 
                             this->chooseOption[1].setFont(font);
                             this->chooseOption[1].setCharacterSize(40);
                             this->chooseOption[1].setFillColor(sf::Color::White);
-                            this->chooseOption[1].setPosition(sf::Vector2f({440.f, 250.f}));
+                            this->chooseOption[1].setPosition(sf::Vector2f({aboutSize.x / 2.f + 60.f, aboutSize.y / 2.f}));
                             this->chooseOption[1].setString("ROMANA");
 
                             aboutText.setFont(aboutFont);
                             aboutText.setCharacterSize(27);
-                            aboutText.setOutlineColor(sf::Color(128, 0, 0));
-                            aboutText.setOutlineThickness(2.f);
-                            aboutText.setPosition(sf::Vector2f({40.f, 10.f}));
+                            aboutText.setFillColor(sf::Color::White);
+                            aboutText.setPosition(sf::Vector2f(60.f, 30.f));
+                            // aboutText.setOutlineColor(sf::Color::White);
+                            // aboutText.setOutlineThickness(2.f);
                         }
 
                         while (ABOUT->isOpen())
