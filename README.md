@@ -65,8 +65,7 @@ Here are some short GIFs showing different parts of the game:
 ### Main Menu
 ![MainMenu](./Media/gifMenu.gif)
 
-### About Page
-![AboutMenu](./Media/gifAbout.gif)
+
 
 ### Chest Collision
 ![ChestCollision](./Media/gifCollision.gif)
