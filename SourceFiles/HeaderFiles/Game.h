@@ -22,11 +22,12 @@
 #include "MediumChest.h"
 #include "HardChest.h"
 #include "Paper.h"
+#include "PlayerBuilder.h"
+#include "EndGame.h"
 
 class Game
 {
 private:
-    Game(); // private constructor for unique instance
     sf::RenderWindow *window;
     sf::VideoMode myScreenSize;
     std::optional<sf::Event> myEvent; // Changed sf::Event logic in SFML 3.0 (now requires optional from std namespace)
@@ -55,8 +56,8 @@ private:
     bool gameIsRunning = true;
     std::stringstream ssTime;
 
-    sf::RenderWindow *scoreWindow;
-    std::optional<sf::Event> scoreWindowEvent;
+    // sf::RenderWindow *scoreWindow;
+    // std::optional<sf::Event> scoreWindowEvent;
 
     sf::Text scoreText;
     sf::Font scoreFont;
@@ -66,7 +67,7 @@ private:
     sf::Text currentScoreText;
     std::stringstream ssScore;
 
-    sf::Sprite *backgroundScoreWindow;
+    // sf::Sprite *backgroundScoreWindow;
 
     Player *player;
     sf::Clock dt_clock;
@@ -102,18 +103,15 @@ private:
     void initWorld();
     void initTimerText();
     void initTimerFont();
-    void initScoreWindow();
-    void initScoreTextAndFontForScoreWindow();
+    // void initScoreWindow();
+    // void initScoreTextAndFontForScoreWindow();
     void initScoreText();
-    void initBackgroundScoreWindow();
+    // void initBackgroundScoreWindow();
     void initChest(int difficulty);
     void initQuestionPaper(std::string questionText);
 
 public:
-    Game(const Game &) = delete;
-    Game &operator=(const Game &) = delete; // delete constructors
-
-    static Game &getGameInstance(); // unique game instance
+    Game();
 
     // Updates
     void update();
@@ -137,6 +135,7 @@ public:
     // Getters
     const sf::RenderWindow &getWindow() const;
     bool getGameIsRunning();
+    int getPlayerScore();
 
     void displayScoreOnWindow();
     static int generateRandomNumber(int min, int max);

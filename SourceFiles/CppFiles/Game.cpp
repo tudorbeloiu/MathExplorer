@@ -24,12 +24,6 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     Game::remainingTimeToInt = 60;
 }
 
-Game &Game::getGameInstance()
-{
-    static Game gameInstance;
-    return gameInstance;
-}
-
 void Game::initWindow()
 {
     // Set game screen size
@@ -41,17 +35,16 @@ void Game::initWindow()
     this->window->setVerticalSyncEnabled(false);
 }
 
-void Game::initScoreWindow()
-{
-    this->scoreWindow = new sf::RenderWindow(sf::VideoMode({800, 600}), "Your score", sf::Style::Close | sf::Style::Titlebar);
-    this->scoreWindow->setFramerateLimit(60);
-    this->window->setVerticalSyncEnabled(false);
-}
+// void Game::initScoreWindow()
+// {
+//     this->scoreWindow = new sf::RenderWindow(sf::VideoMode({800, 600}), "Your score", sf::Style::Close | sf::Style::Titlebar);
+//     this->scoreWindow->setFramerateLimit(60);
+//     this->window->setVerticalSyncEnabled(false);
+// }
 
 void Game::initPlayer()
 {
-    this->player = new Player();
-    this->player->setSpawnPoint(sf::Vector2f({450.f, 500.f}));
+    this->player = PlayerBuilder().setMovementSpeed(175.f).setPlayerScale({2.5f, 2.5f}).setPlayerVelocity({0.f, 0.f}).setSPoint({450.f, 500.f}).build();
 }
 
 void Game::initQuestionPaper(std::string questionText)
@@ -71,41 +64,41 @@ void Game::initQuestionPaper(std::string questionText)
     }
 }
 
-void Game::initScoreTextAndFontForScoreWindow()
-{
-    if (!this->scoreFont.openFromFile("Fonts/planes.ttf"))
-    {
-        throw LoadFontException("Failed to load font from Fonts/planes.ttf");
-    }
+// void Game::initScoreTextAndFontForScoreWindow()
+// {
+//     if (!this->scoreFont.openFromFile("Fonts/planes.ttf"))
+//     {
+//         throw LoadFontException("Failed to load font from Fonts/planes.ttf");
+//     }
 
-    this->scoreText.setFont(this->scoreFont);
-    this->scoreText.setCharacterSize(76);
-    this->scoreText.setFillColor(sf::Color::White);
-    this->scoreText.setOutlineColor(sf::Color(128, 0, 0, 255));
-    this->scoreText.setOutlineThickness(3.5f);
+//     this->scoreText.setFont(this->scoreFont);
+//     this->scoreText.setCharacterSize(76);
+//     this->scoreText.setFillColor(sf::Color::White);
+//     this->scoreText.setOutlineColor(sf::Color(128, 0, 0, 255));
+//     this->scoreText.setOutlineThickness(3.5f);
 
-    std::stringstream ss;
-    if (this->playerScore <= 20)
-    {
-        ss << "You can do better!\n"
-           << "Your score: " << this->playerScore;
-    }
-    else
-    {
-        ss << "Congratulations!\n"
-           << "Your score: " << this->playerScore;
-    }
+//     std::stringstream ss;
+//     if (this->playerScore <= 20)
+//     {
+//         ss << "You can do better!\n"
+//            << "Your score: " << this->playerScore;
+//     }
+//     else
+//     {
+//         ss << "Congratulations!\n"
+//            << "Your score: " << this->playerScore;
+//     }
 
-    this->scoreText.setString(ss.str());
+//     this->scoreText.setString(ss.str());
 
-    sf::Vector2u scoreWindowSize = this->scoreWindow->getSize();
+//     sf::Vector2u scoreWindowSize = this->scoreWindow->getSize();
 
-    sf::FloatRect scoreTextBounds = this->scoreText.getGlobalBounds();
+//     sf::FloatRect scoreTextBounds = this->scoreText.getGlobalBounds();
 
-    this->scoreText.setOrigin(sf::Vector2f({scoreTextBounds.position.x + scoreTextBounds.size.x / 2.f, scoreTextBounds.position.y + scoreTextBounds.size.y / 2.f}));
+//     this->scoreText.setOrigin(sf::Vector2f({scoreTextBounds.position.x + scoreTextBounds.size.x / 2.f, scoreTextBounds.position.y + scoreTextBounds.size.y / 2.f}));
 
-    this->scoreText.setPosition(sf::Vector2f({scoreWindowSize.x / 2.f, scoreWindowSize.y / 2.f}));
-}
+//     this->scoreText.setPosition(sf::Vector2f({scoreWindowSize.x / 2.f, scoreWindowSize.y / 2.f}));
+// }
 
 void Game::initTimerFont()
 {
@@ -138,10 +131,10 @@ void Game::initScoreText()
     this->currentScoreText.setPosition(sf::Vector2f({1050.f, 660.f}));
 }
 
-void Game::initBackgroundScoreWindow()
-{
-    this->backgroundScoreWindow = new sf::Sprite(this->battlegroundTexture);
-}
+// void Game::initBackgroundScoreWindow()
+// {
+//     this->backgroundScoreWindow = new sf::Sprite(this->battlegroundTexture);
+// }
 
 void Game::initWorld()
 {
@@ -496,25 +489,25 @@ void Game::updateScoreText()
     this->currentScoreText.setString(newScore.str());
 }
 
-void Game::updateScoreWindow()
-{
-    while (this->scoreWindowEvent = this->scoreWindow->pollEvent())
-    {
-        if (this->scoreWindowEvent->is<sf::Event::Closed>())
-        {
-            this->scoreWindow->close();
-            break;
-        }
-        if (const auto &keyCodeWindow = this->scoreWindowEvent->getIf<sf::Event::KeyPressed>())
-        {
-            if (keyCodeWindow->code == sf::Keyboard::Key::Escape)
-            {
-                this->scoreWindow->close();
-                break;
-            }
-        }
-    }
-}
+// void Game::updateScoreWindow()
+// {
+//     while (this->scoreWindowEvent = this->scoreWindow->pollEvent())
+//     {
+//         if (this->scoreWindowEvent->is<sf::Event::Closed>())
+//         {
+//             this->scoreWindow->close();
+//             break;
+//         }
+//         if (const auto &keyCodeWindow = this->scoreWindowEvent->getIf<sf::Event::KeyPressed>())
+//         {
+//             if (keyCodeWindow->code == sf::Keyboard::Key::Escape)
+//             {
+//                 this->scoreWindow->close();
+//                 break;
+//             }
+//         }
+//     }
+// }
 
 void Game::update()
 {
@@ -600,21 +593,21 @@ void Game::renderScoreText()
     this->window->draw(this->currentScoreText);
 }
 
-void Game::renderBackgroundScoreWindow()
-{
-    this->scoreWindow->draw(*this->backgroundScoreWindow);
-}
+// void Game::renderBackgroundScoreWindow()
+// {
+//     this->scoreWindow->draw(*this->backgroundScoreWindow);
+// }
 
-void Game::renderScoreWindow()
-{
-    this->scoreWindow->clear();
+// void Game::renderScoreWindow()
+// {
+//     this->scoreWindow->clear();
 
-    // display the score
-    this->renderBackgroundScoreWindow();
-    this->displayScoreOnWindow();
+//     // display the score
+//     this->renderBackgroundScoreWindow();
+//     this->displayScoreOnWindow();
 
-    this->scoreWindow->display();
-}
+//     this->scoreWindow->display();
+// }
 
 void Game::renderChests()
 {
@@ -654,10 +647,10 @@ void Game::render()
     this->window->display(); // Display the new frame
 }
 
-void Game::displayScoreOnWindow() // display the score on Score window
-{
-    this->scoreWindow->draw(this->scoreText);
-}
+// void Game::displayScoreOnWindow() // display the score on Score window
+// {
+//     this->scoreWindow->draw(this->scoreText);
+// }
 
 // Getters
 const sf::RenderWindow &Game::getWindow() const
@@ -668,6 +661,11 @@ const sf::RenderWindow &Game::getWindow() const
 bool Game::getGameIsRunning()
 {
     return this->gameIsRunning;
+}
+
+int Game::getPlayerScore()
+{
+    return this->playerScore;
 }
 
 void Game::run()
@@ -681,16 +679,14 @@ void Game::run()
 
     if (this->remainingTimeToInt <= 0)
     {
-        this->initScoreWindow();
-        this->initBackgroundScoreWindow();
-        this->initScoreTextAndFontForScoreWindow();
-        while (this->scoreWindow->isOpen())
+        EndGame endGameScreen;
+        endGameScreen.initScoreTextAndFontForScoreWindow(this->playerScore);
+        while (endGameScreen.getScoreWindowTarget()->isOpen())
         {
-            this->updateScoreWindow();
+            endGameScreen.updateScoreWindow();
 
-            this->renderScoreWindow();
+            endGameScreen.renderEndGame();
         }
-        delete this->backgroundScoreWindow;
     }
 }
 
@@ -855,6 +851,6 @@ Game::~Game()
     delete this->back_land;
     delete this->battleground;
     delete this->background;
-    delete this->scoreWindow;
+    // delete this->scoreWindow;
     delete this->window;
 }

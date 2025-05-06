@@ -12,6 +12,7 @@
 
 #include "Game.h"
 #include "Exceptions.h"
+#include "PlayerBuilder.h"
 
 class MainMenu
 {

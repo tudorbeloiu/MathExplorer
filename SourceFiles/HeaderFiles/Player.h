@@ -21,6 +21,10 @@ enum PlayerStates
 class Player
 {
 private:
+    Player() = default; // private constructor, only the builder is using it
+
+    friend class PlayerBuilder;
+
     sf::Texture playerTextureIdle;
     sf::Texture playerTextureWalk;
     sf::Sprite *player;
@@ -42,7 +46,8 @@ private:
     void initSprite();
 
 public:
-    Player();
+    Player(const Player &) = delete;
+    Player &operator=(const Player &) = delete;
 
     void updateMovement(float dt);
     void updateCollision(sf::RenderTarget *target);

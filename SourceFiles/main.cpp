@@ -8,6 +8,8 @@ int main()
     srand(static_cast<unsigned>(time(0))); // Generate the seed for random
 
     auto &mainMenu = MainMenu::getInstance();
+    PlayerBuilder playerBuilder;
+
     while (mainMenu.getMenuWindow().isOpen())
     {
         // update main menu

@@ -1,13 +1,5 @@
 #include "../HeaderFiles/Player.h"
 
-Player::Player()
-{
-    this->animationState = IDLE;
-    this->initTexture();
-    this->initSprite();
-    this->movementSpeed = 175.f;
-}
-
 void Player::initTexture()
 {
     if (!this->playerTextureIdle.loadFromFile("Textures/Player/idle.png"))
@@ -25,7 +17,6 @@ void Player::initSprite()
     this->player = new sf::Sprite(this->playerTextureIdle);
     this->currentFrame = sf::IntRect({0, 3 * 48}, {40, 48}); // Last row, first column
     this->player->setTextureRect(this->currentFrame);
-    this->player->setScale({2.5f, 2.5f});
 }
 
 void Player::updateAnimationsForMainMenu()
