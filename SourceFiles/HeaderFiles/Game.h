@@ -26,6 +26,7 @@
 class Game
 {
 private:
+    Game(); // private constructor for unique instance
     sf::RenderWindow *window;
     sf::VideoMode myScreenSize;
     std::optional<sf::Event> myEvent; // Changed sf::Event logic in SFML 3.0 (now requires optional from std namespace)
@@ -109,7 +110,10 @@ private:
     void initQuestionPaper(std::string questionText);
 
 public:
-    Game();
+    Game(const Game &) = delete;
+    Game &operator=(const Game &) = delete; // delete constructors
+
+    static Game &getGameInstance(); // unique game instance
 
     // Updates
     void update();

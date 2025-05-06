@@ -2,28 +2,28 @@
 
 bool MainMenu::chooseImpossibleType = false;
 
-MainMenu::MainMenu(float width, float height) : optionEng(font), optionRom(font)
+MainMenu::MainMenu() : optionEng(font), optionRom(font)
 {
-    this->initMainMenuVideo();
-    this->initBackgroundTexture();
-    this->initFont();
-    this->initText();
-    this->initPlayer();
-    this->chooseImpossibleType = false;
-    this->pressed = false;
-    this->drawOnlyAbout = false;
-    this->optionLanguage = 0;
-    this->aboutMessageRomanian = "- Pune-ti abilitatile de matematica la incercare in aceasta provocare rapida!\n"
-                                 "- Aveti 60 de secunde pentru a deschide cat mai multe cufere,\nfiecare afisand o alta intrebare de matematica."
-                                 "- Cuferele vin in trei niveluri de dificultate:\n"
-                                 "  =| Easy Chest: adunari si scaderi simple\n"
-                                 "  =| Cufar mediu: inmultiri si diviziuni cu numere intregi\n"
-                                 "  =| Hard Chest: ecuatii de gradul doi. Daca discriminantul (D) este negativ, tastati \"imposibil\"\n(indiferent de majuscule).\n"
-                                 "- Daca D e mai mare decat 0, ambele solutii x1 si x2 vor fi intotdeauna numere intregi,\nintroduceti-le ca x1,x2 cu x1 mai mic decat x2.\n"
-                                 "- Pentru a deschide un cufar, apasati G. Daca nu cunoasteti raspunsul, trebuie doar\nsa apasati R pentru a merge mai departe;\ncronometrul continua sa ruleze!\n"
-                                 "- Strangeti cat mai multe puncte si concurati cu prietenii in timp ce va antrenati mintea.\n";
+    initMainMenuVideo();
+    initBackgroundTexture();
+    initFont();
+    initText();
+    initPlayer();
+    chooseImpossibleType = false;
+    pressed = false;
+    drawOnlyAbout = false;
+    optionLanguage = 0;
+    aboutMessageRomanian = "- Pune-ti abilitatile de matematica la incercare in aceasta provocare rapida!\n"
+                           "- Aveti 60 de secunde pentru a deschide cat mai multe cufere,\nfiecare afisand o alta intrebare de matematica."
+                           "- Cuferele vin in trei niveluri de dificultate:\n"
+                           "  =| Easy Chest: adunari si scaderi simple\n"
+                           "  =| Cufar mediu: inmultiri si diviziuni cu numere intregi\n"
+                           "  =| Hard Chest: ecuatii de gradul doi. Daca discriminantul (D) este negativ, tastati \"imposibil\"\n(indiferent de majuscule).\n"
+                           "- Daca D e mai mare decat 0, ambele solutii x1 si x2 vor fi intotdeauna numere intregi,\nintroduceti-le ca x1,x2 cu x1 mai mic decat x2.\n"
+                           "- Pentru a deschide un cufar, apasati G. Daca nu cunoasteti raspunsul, trebuie doar\nsa apasati R pentru a merge mai departe;\ncronometrul continua sa ruleze!\n"
+                           "- Strangeti cat mai multe puncte si concurati cu prietenii in timp ce va antrenati mintea.\n";
 
-    this->aboutMessageEnglish =
+    aboutMessageEnglish =
         "- Put your math skills to the test in this fast-paced challenge!\n"
         "- You have 60 seconds to open as many chests as you can,\neach one asking a different math question.\n"
         "- Chests come in three difficulty levels:\n"
@@ -33,6 +33,12 @@ MainMenu::MainMenu(float width, float height) : optionEng(font), optionRom(font)
         "- If D g.e than 0, both solutions x1 and x2 will always be int numbers,\nenter them as x1,x2 with x1 less than x2.\n"
         "- To open a chest, press G. If you don t know the answer, just press R to skip it\nand move on; the timer keeps running!\n"
         "- Rack up as many points as possible and compete with friends while sharpening your mind.\n                  Good luck!";
+}
+
+MainMenu &MainMenu::getInstance()
+{
+    static MainMenu mainMenu; // unique mainmenu
+    return mainMenu;
 }
 
 void MainMenu::initMainMenuVideo()
@@ -170,7 +176,7 @@ void MainMenu::pollEvents()
 
                     if (choice == 0)
                     {
-                        Game game;
+                        auto &game = Game::getGameInstance();
                         game.run();
                     }
                     if (choice == 1)

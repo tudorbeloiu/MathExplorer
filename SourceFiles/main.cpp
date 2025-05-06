@@ -7,7 +7,7 @@ int main()
 
     srand(static_cast<unsigned>(time(0))); // Generate the seed for random
 
-    MainMenu mainMenu(800, 600);
+    auto &mainMenu = MainMenu::getInstance();
     while (mainMenu.getMenuWindow().isOpen())
     {
         // update main menu

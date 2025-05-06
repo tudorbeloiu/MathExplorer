@@ -24,6 +24,12 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     Game::remainingTimeToInt = 60;
 }
 
+Game &Game::getGameInstance()
+{
+    static Game gameInstance;
+    return gameInstance;
+}
+
 void Game::initWindow()
 {
     // Set game screen size

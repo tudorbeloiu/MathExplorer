@@ -16,6 +16,7 @@
 class MainMenu
 {
 private:
+    MainMenu(); // private constructor to respect Meyers's Singleton
     sf::RenderWindow *MENU;
     sf::Font font;
     std::vector<sf::Text> mainMenuText;
@@ -47,7 +48,10 @@ private:
     void initPlayer();
 
 public:
-    MainMenu(float width, float height);
+    MainMenu(const MainMenu &) = delete;
+    MainMenu &operator=(const MainMenu &) = delete; // delete copy constr and = constr
+
+    static MainMenu &getInstance();
 
     void draw(sf::RenderWindow &window);
     void moveUp();
