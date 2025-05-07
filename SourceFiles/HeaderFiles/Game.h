@@ -74,8 +74,8 @@ private:
     float dt;
 
     // Chest implementation in game
-    Chest *chest;
     std::vector<Chest *> chestsArray;
+    Chest *prototypes[4] = {nullptr, nullptr, nullptr, nullptr};
     sf::Clock chestsTimer;
     const int spawnerTime = 3.0f;
     const int maxNumberChests = 5;
@@ -108,6 +108,7 @@ private:
     void initScoreText();
     // void initBackgroundScoreWindow();
     void initChest(int difficulty);
+    void initPrototypes();
     void initQuestionPaper(std::string questionText);
 
 public:

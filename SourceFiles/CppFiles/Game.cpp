@@ -8,6 +8,7 @@ Game::Game() : timerText(timerFont), scoreText(scoreFont), currentScoreText(time
     this->initWindow();
     this->initWorld();
     this->initPlayer();
+    this->initPrototypes();
     this->gameIsRunning = true;
     this->ssTime << "Time left: " << this->remainingTimeToInt;
     this->ssScore << "Score: " << this->playerScore;
@@ -733,26 +734,20 @@ sf::Vector2u Game::avoidCollisionSpawn(Chest *chest, Player *player)
     return newPosition;
 }
 
+void Game::initPrototypes()
+{
+    prototypes[1] = new EasyChest("Textures/Chest/easychest.png", 5, 50.f, 1);
+    prototypes[2] = new MediumChest("Textures/Chest/mediumchest.png", 10, 30.f, 2);
+    prototypes[3] = new HardChest("Textures/Chest/hardchest.png", 15, 20.f, 3);
+}
+
 void Game::initChest(int difficulty)
 {
 
-    sf::Vector2u chestCoords;
+    Chest *chest = prototypes[difficulty]->clone();
+    chest->genQuestion();
 
-    if (difficulty == 1)
-    {
-        this->chest = new EasyChest("Textures/Chest/easychest.png", 5, 50.f, 1);
-        chestCoords = this->avoidCollisionSpawn(this->chest, this->player);
-    }
-    else if (difficulty == 2)
-    {
-        this->chest = new MediumChest("Textures/Chest/mediumchest.png", 10, 30.f, 2);
-        chestCoords = this->avoidCollisionSpawn(this->chest, this->player);
-    }
-    else if (difficulty == 3)
-    {
-        this->chest = new HardChest("Textures/Chest/hardchest.png", 15, 20.f, 3);
-        chestCoords = this->avoidCollisionSpawn(this->chest, this->player);
-    }
+    sf::Vector2u chestCoords = this->avoidCollisionSpawn(chest, this->player);
     // std::cout << chestCoords.x << " " << chestCoords.y << " " << &this->chest << '\n';
     chest->setPosition(static_cast<sf::Vector2f>(chestCoords));
     chestsArray.push_back(chest);
@@ -844,6 +839,10 @@ Game::~Game()
     for (int i = 0; i < chestsArray.size(); i++)
     {
         delete this->chestsArray[i];
+    }
+    for (int i = 1; i <= 3; i++)
+    {
+        delete this->prototypes[i];
     }
     delete this->player;
     delete this->front_decor;

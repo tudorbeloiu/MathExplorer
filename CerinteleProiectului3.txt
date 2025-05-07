@@ -1,0 +1,42 @@
+Design Patterns (3 design patterns)
+
+-> Singleton (MainMenu.h)
+= Utilizat pentru clasa MainMenu intrucat am nevoie de instantierea unui singur obiect de tip MainMenu
+
+
+
+-> Builder (PlayerBuilder.h)
+= Utilizat pentru clasa Player intrucat in jocul meu se genereaza 2 obiecte care apartin clasei Player: 
+-- Primul player care este doar o animatie in MainMenu
+
+" this->player = PlayerBuilder().setMovementSpeed(0.f).setPlayerScale({2.7f, 2.7f}).setPlayerVelocity({0.f, 0.f}).setSPoint({30.f, 460.f}).build(); "
+
+-- Al doilea player este chiar personajul din joc din clasa Game
+
+" this->player = PlayerBuilder().setMovementSpeed(175.f).setPlayerScale({2.5f, 2.5f}).setPlayerVelocity({0.f, 0.f}).setSPoint({450.f, 500.f}).build(); "
+
+
+->Prototype (Pentru clasa Chest.h)
+= Ca sa nu incarc textura si animatiile de fiecare data cand instantiez un chest, inregistrez un prorotip pt fiecare dificultate, incarcat o singura data: 
+"void Game::initPrototypes()
+{
+    prototypes[1] = new EasyChest("Textures/Chest/easychest.png", 5, 50.f, 1);
+    prototypes[2] = new MediumChest("Textures/Chest/mediumchest.png", 10, 30.f, 2);
+    prototypes[3] = new HardChest("Textures/Chest/hardchest.png", 15, 20.f, 3);
+}"
+
+= In functia de initChest, clonez prototipul:
+"
+void Game::initChest(int difficulty)
+{
+
+    Chest *chest = prototypes[difficulty]->clone();
+...
+"
+Functia de clone (spre exemplu pt clasa EasyChest, celelalte sunt asemanatoare):
+"Chest *EasyChest::clone() const
+{
+    return new EasyChest(*this);
+}"
+
+= Prototype imi permite sa partajez resurse costisitoare, apo sa clonez rapid pt fiecare spawn

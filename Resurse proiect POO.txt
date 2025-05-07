@@ -5,6 +5,11 @@ Resurse teoretice:
 -> https://www.sfml-dev.org./documentation/3.0.0/
 -> https://www.youtube.com/watch?v=bOG8667yePY&ab_channel=Geekprojects (pentru meniul principal)
 -> https://www.youtube.com/watch?v=BLtnd54AMvw&t=1440s&ab_channel=ChiliTomatoNoodle (pentru animatiile personajului, nu e chiar asa de util ca videoclipurile de mai sus)
+-> putina inteligenta artificiala(dar si cu scopul de a invata)
+
+(PENTRU PROIECTUL 3)
+->Pentru design patterns : =https://www.geeksforgeeks.org/flyweight-pattern-c-design-patterns/
+=https://github.com/mcmarius/poo/tree/master/tema-3
 
 
 Resurse grafice:

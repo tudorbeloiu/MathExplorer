@@ -20,13 +20,15 @@ Chest::Chest(const std::string &pathToTexture, int points, float spawnChance, in
 Chest::Chest(const Chest &other)
 {
     this->chestTexture = other.chestTexture;
+    this->chestSprite = std::make_unique<sf::Sprite>(*other.chestSprite);
     this->pointsGained = other.pointsGained;
     this->spawnChance = other.spawnChance;
     this->questionType = other.questionType;
-    if (other.chestSprite)
-    {
-        this->chestSprite = std::make_unique<sf::Sprite>(*other.chestSprite);
-    }
+    this->currentFrame = other.currentFrame;
+    this->frameIndex = other.frameIndex;
+    this->animationFinished = other.animationFinished;
+    this->chestSprite->setTexture(chestTexture);
+    this->chestSprite->setTextureRect(currentFrame);
 }
 
 Chest &Chest::operator=(const Chest &other)
@@ -34,18 +36,15 @@ Chest &Chest::operator=(const Chest &other)
     if (this != &other)
     {
         this->chestTexture = other.chestTexture;
+        this->chestSprite = std::make_unique<sf::Sprite>(*other.chestSprite);
+        this->chestSprite->setTexture(chestTexture);
+        this->chestSprite->setTextureRect(other.currentFrame);
         this->pointsGained = other.pointsGained;
         this->spawnChance = other.spawnChance;
         this->questionType = other.questionType;
-
-        if (other.chestSprite)
-        {
-            this->chestSprite = std::make_unique<sf::Sprite>(*other.chestSprite);
-        }
-        else
-        {
-            this->chestSprite.reset();
-        }
+        this->currentFrame = other.currentFrame;
+        this->frameIndex = other.frameIndex;
+        this->animationFinished = other.animationFinished;
     }
     return *this;
 }
