@@ -45,7 +45,7 @@ void Game::initWindow()
 
 void Game::initPlayer()
 {
-    this->player = PlayerBuilder().setMovementSpeed(175.f).setPlayerScale({2.5f, 2.5f}).setPlayerVelocity({0.f, 0.f}).setSPoint({450.f, 500.f}).build();
+    this->player = PlayerBuilder<Player>().setMovementSpeed(175.f).setPlayerScale({2.5f, 2.5f}).setPlayerVelocity({0.f, 0.f}).setSPoint({450.f, 500.f}).build();
 }
 
 void Game::initQuestionPaper(std::string questionText)

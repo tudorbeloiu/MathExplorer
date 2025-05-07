@@ -9,21 +9,14 @@
 #include <SFML/Network.hpp>
 #include <SFML/System.hpp>
 
-enum PlayerStates
-{
-    IDLE = 0,
-    MOVING_LEFT,
-    MOVING_RIGHT,
-    MOVING_UP,
-    MOVING_DOWN,
-};
+#include "PlayerBuilder.h"
 
 class Player
 {
 private:
     Player() = default; // private constructor, only the builder is using it
 
-    friend class PlayerBuilder;
+    friend class PlayerBuilder<Player>;
 
     sf::Texture playerTextureIdle;
     sf::Texture playerTextureWalk;

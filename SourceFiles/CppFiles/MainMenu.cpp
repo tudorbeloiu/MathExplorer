@@ -49,7 +49,7 @@ void MainMenu::initMainMenuVideo()
 }
 void MainMenu::initPlayer()
 {
-    this->player = PlayerBuilder().setMovementSpeed(0.f).setPlayerScale({2.7f, 2.7f}).setPlayerVelocity({0.f, 0.f}).setSPoint({30.f, 460.f}).build();
+    this->player = PlayerBuilder<Player>().setMovementSpeed(0.f).setPlayerScale({2.7f, 2.7f}).setPlayerVelocity({0.f, 0.f}).setSPoint({30.f, 460.f}).build();
     // this->player = new Player();
     // sf::Vector2u mmBounds = this->MENU->getSize();
     // sf::Vector2f newPlayerPos = {20.f, 470.f};
