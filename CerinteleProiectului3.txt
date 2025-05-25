@@ -40,3 +40,7 @@ Functia de clone (spre exemplu pt clasa EasyChest, celelalte sunt asemanatoare):
 }"
 
 = Prototype imi permite sa partajez resurse costisitoare, apo sa clonez rapid pt fiecare spawn
+
+TEMPLATE
+-> clasa template, functii template, atribut al unei clase de tip template. (toate cerintele proiectului sunt punctate)
+
