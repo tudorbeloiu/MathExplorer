@@ -43,4 +43,22 @@ Functia de clone (spre exemplu pt clasa EasyChest, celelalte sunt asemanatoare):
 
 TEMPLATE
 -> clasa template, functii template, atribut al unei clase de tip template. (toate cerintele proiectului sunt punctate)
+->clasa template: 
+  = Clasa PlayerBuilder
+"template <typename T>
+class PlayerBuilder"
+
+-> atribut de timp template:
+"class PlayerBuilder
+{
+private:
+    T *player;" 
+
+->functie membru care sa depinde de template:
+"
+    T *build()
+    {
+        return player;
+    }
+"
 
